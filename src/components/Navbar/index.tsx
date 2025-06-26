@@ -1,6 +1,7 @@
 import React from "react"
 import { Navbar as HeroNavbar, NavbarBrand, NavbarContent, NavbarItem, Link } from "@heroui/react"    
 import { ConnectWalletsButton } from "./ConnectWalletsButton"
+import { SelectChainButton } from "./SelectChainButton"
 export const Navbar = () => {
     return <HeroNavbar>
         <NavbarBrand>
@@ -24,8 +25,8 @@ export const Navbar = () => {
             </NavbarItem>
         </NavbarContent>
         <NavbarContent justify="end">
-            <NavbarItem className="hidden lg:flex">
-                <Link href="#">Login</Link>
+            <NavbarItem >
+                <SelectChainButton />
             </NavbarItem>
             <NavbarItem>
                 <ConnectWalletsButton />

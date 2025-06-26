@@ -41,7 +41,7 @@ export const BaseContent = () => {
     }
     const renderAddress = (platformKey: PlatformKey) => {
         return (
-            <div className="text-sm text-foreground-500">
+            <div className="text-xs text-foreground-500">
                 {truncateString(getAddress(platformKey), 6, 4)}
             </div>
         )
@@ -66,10 +66,10 @@ export const BaseContent = () => {
                                         className="w-10 h-10"
                                     />
                                     <div>
-                                        <div>{platform.name}</div>
+                                        <div className="text-sm">{platform.name}</div>
                                         {renderAddress(platform.key)}
                                         {platform.status === Status.ComingSoon && (
-                                            <div className="text-sm text-foreground-500">
+                                            <div className="text-xs text-foreground-500">
                       Coming Soon
                                             </div>
                                         )}

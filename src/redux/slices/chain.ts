@@ -16,7 +16,7 @@ export const chainSlice = createSlice({
     name: "chain",
     initialState,
     reducers: {
-        setChain: (state, action) => {
+        setChainKey: (state, action) => {
             state.chainKey = action.payload
         },
         setNetwork: (state, action) => {
@@ -26,4 +26,4 @@ export const chainSlice = createSlice({
 })
 
 export const chainReducer = chainSlice.reducer
-export const { setChain } = chainSlice.actions
+export const { setChainKey } = chainSlice.actions

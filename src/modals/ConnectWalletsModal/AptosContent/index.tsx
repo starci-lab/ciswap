@@ -37,9 +37,9 @@ export const AptosContent = () => {
                                         className="w-10 h-10"
                                     />
                                     <div className="flex flex-col gap-1">
-                                        <div>{wallet.name}</div>
+                                        <div className="text-sm">{wallet.name}</div>
                                         {selectedWallet?.name === wallet.name && (
-                                            <div className="text-sm text-success">Connected</div>
+                                            <div className="text-xs text-success">Connected</div>
                                         )}
                                     </div>
                                 </div>
