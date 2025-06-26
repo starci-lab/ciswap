@@ -1,5 +1,6 @@
 import React from "react"
-import { Navbar as HeroNavbar, NavbarBrand, NavbarContent, NavbarItem, Button, Link } from "@heroui/react"    
+import { Navbar as HeroNavbar, NavbarBrand, NavbarContent, NavbarItem, Link } from "@heroui/react"    
+import { ConnectWalletsButton } from "./ConnectWalletsButton"
 export const Navbar = () => {
     return <HeroNavbar>
         <NavbarBrand>
@@ -27,9 +28,7 @@ export const Navbar = () => {
                 <Link href="#">Login</Link>
             </NavbarItem>
             <NavbarItem>
-                <Button as={Link} color="primary" href="#" variant="flat">
-          Sign Up
-                </Button>
+                <ConnectWalletsButton />
             </NavbarItem>
         </NavbarContent>
     </HeroNavbar>

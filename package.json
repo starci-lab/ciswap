@@ -9,15 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aptos-labs/wallet-adapter-react": "^6.1.2",
     "@heroui/react": "^2.7.11",
+    "@phosphor-icons/react": "^2.1.10",
+    "@reduxjs/toolkit": "^2.8.2",
+    "dayjs": "^1.11.13",
     "framer-motion": "^12.19.1",
     "next": "14.2.30",
+    "numeral": "^2.0.6",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
     "@types/node": "^20",
+    "@types/numeral": "^2.0.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8.57.1",
