@@ -8,7 +8,7 @@ export const ConnectWalletsButton = () => {
     )
     return (
         <Button variant="flat" color="primary" onPress={onOpen}>
-      Connect Wallet
+      Connect Wallets
         </Button>
     )
 }
