@@ -27,6 +27,7 @@ export const SelectChainModal = () => {
                     <div className="grid grid-cols-3 gap-2">
                         {chains.map((chain) => (
                             <Card
+                                disableAnimation={true}
                                 key={chain.key}
                                 isDisabled={chain.key === chainKey}
                                 isPressable={chain.key !== chainKey}
