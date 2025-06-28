@@ -4,7 +4,7 @@ import { HeroUIProvider } from "@heroui/react"
 import { Provider as ReduxProvider } from "react-redux"
 import { store, useAppSelector } from "@/redux"
 import dynamic from "next/dynamic"
-import { SingletonHookProvider } from "@/singleton"
+import { SingletonHook2Provider, SingletonHookProvider } from "@/singleton"
 import { IconContext } from "@phosphor-icons/react"
 import {
     AptosWalletAdapterProvider,
@@ -15,7 +15,7 @@ import { Network } from "@/types"
 export const ContentLayout = ({ children }: PropsWithChildren) => {
     const network = useAppSelector((state) => state.chainReducer.network)
     const _network =
-    network === Network.Mainnet ? AptosNetwork.MAINNET : AptosNetwork.TESTNET
+    network === Network.Mainnet ? AptosNetwork.MAINNET : AptosNetwork.DEVNET
     return (
         <AptosWalletAdapterProvider
             autoConnect={true}
@@ -26,13 +26,15 @@ export const ContentLayout = ({ children }: PropsWithChildren) => {
         >
             <HeroUIProvider>
                 <SingletonHookProvider>
-                    <IconContext.Provider
-                        value={{
-                            size: 20,
-                        }}
-                    >
-                        {children}
-                    </IconContext.Provider>
+                    <SingletonHook2Provider>
+                        <IconContext.Provider
+                            value={{
+                                size: 20,
+                            }}
+                        >
+                            {children}
+                        </IconContext.Provider>
+                    </SingletonHook2Provider>
                 </SingletonHookProvider>
             </HeroUIProvider>
         </AptosWalletAdapterProvider>

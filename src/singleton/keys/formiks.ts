@@ -1,0 +1,1 @@
+export const CREATE_PAIR_FORMIK = "CREATE_PAIR_FORMIK"
