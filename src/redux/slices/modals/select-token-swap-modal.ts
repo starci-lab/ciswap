@@ -2,17 +2,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { SelectTokenModalKey } from "./types"
 
-export interface SelectTokenModalSlice {
+export interface SelectTokenSwapModalSlice {
   selectedToken?: SelectTokenModalKey;
 }
 
-const initialState: SelectTokenModalSlice = {}
+const initialState: SelectTokenSwapModalSlice = {}
 
-export const selectTokenModalSlice = createSlice({
-    name: "selectTokenModal",
+export const selectTokenSwapModalSlice = createSlice({
+    name: "selectTokenSwapModal",
     initialState,
     reducers: {
-        setSelectedToken: (
+        setSelectedTokenSwap: (
             state,
             action: PayloadAction<SelectTokenModalKey | undefined>
         ) => {
@@ -21,8 +21,8 @@ export const selectTokenModalSlice = createSlice({
     },
 })
 
-export const selectTokenModalReducer =
-  selectTokenModalSlice.reducer
+export const selectTokenSwapModalReducer =
+  selectTokenSwapModalSlice.reducer
 export const {
-    setSelectedToken,
-} = selectTokenModalSlice.actions
+    setSelectedTokenSwap,
+} = selectTokenSwapModalSlice.actions

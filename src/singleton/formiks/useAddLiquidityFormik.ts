@@ -7,9 +7,8 @@ import { useSingletonHook } from "../core"
 import { useAptosMoveCallSwrMutation } from "../swrs"
 import { APTOS_SWAP_RESOURCE_ACCOUNT } from "@/config"
 import { computeRaw } from "@/utils"
-import { Account } from "@aptos-labs/ts-sdk"
 
-export interface CreatePairFormikValues {
+export interface AddLiquidityFormikValues {
     token0: string
     token0Typed: string
     token1: string
@@ -22,18 +21,18 @@ export interface CreatePairFormikValues {
 
 }
 
-export const useCreatePairFormik = (): FormikProps<CreatePairFormikValues> => {
+export const useAddLiquidityFormik = (): FormikProps<AddLiquidityFormikValues> => {
     const { swrMutation } = useSingletonHook<
     ReturnType<typeof useAptosMoveCallSwrMutation>
   >(APTOS_MOVE_CALL_SWR_MUTATION)
-    const initialValues: CreatePairFormikValues = {
+    const initialValues: AddLiquidityFormikValues = {
         token0: "",
         token0Typed: "",
         token1: "",
         token1Typed: "",
         amount0: 10,
         amount1: 10,
-        poolAddress: Account.generate().accountAddress.toString(),
+        poolAddress: "",
     }
     // Yup validation schema
     const validationSchema = Yup.object({
@@ -52,7 +51,7 @@ export const useCreatePairFormik = (): FormikProps<CreatePairFormikValues> => {
         onSubmit: async ({ token0, token1, amount0, amount1, poolAddress }) => {
             // onpen the sign transaction moda
             const data = await swrMutation.trigger({
-                function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::router::create_pair`,
+                function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::router::add_liquidity`,
                 functionArguments: [poolAddress, computeRaw(amount0), computeRaw(amount1)],
                 typeArguments: [token0, token1],
             })

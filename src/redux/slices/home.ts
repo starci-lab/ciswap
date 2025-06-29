@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit"
 export enum HomeTab {
     Swap = "swap",
     CreatePair = "create-pair",
-    Earn = "earn"
+    AddLiquidity = "add-liquidity",
 }
 
 export interface MainSlice {

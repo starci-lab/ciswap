@@ -13,28 +13,29 @@ import {
 } from "@heroui/react"
 import {
     useSingletonHook,
-    SELECT_TOKEN_MODAL,
     useSingletonHook2,
     useGetTokenMetadataSwrMutation,
     GET_TOKEN_METADATA_SWR_MUTATION,
+    useSwapFormik,
+    SWAP_FORMIK,
+    SELECT_TOKEN_SWAP_MODAL,
 } from "@/singleton"
 import { PlatformKey, chainKeyToPlatformKey } from "@/types"
 import { useAppSelector } from "@/redux"
-import { CREATE_PAIR_FORMIK, useCreatePairFormik } from "@/singleton"
 import { SelectTokenModalKey } from "@/redux"
 import { useAsyncList } from "@react-stately/data"
 import { TokenMetadata } from "@/modules/blockchain"
 import { TokenImage } from "@/components"
 
-export const SelectTokenModal = () => {
+export const SelectTokenSwapModal = () => {
     const selectedChainKey = useAppSelector(
         (state) => state.chainReducer.chainKey
     )
     const tokenKey = useAppSelector(
-        (state) => state.modalReducer.selectTokenModal.selectedToken
+        (state) => state.modalReducer.selectTokenSwapModal.selectedToken
     )
     const { isOpen, onOpenChange, onClose } =
-    useSingletonHook<ReturnType<typeof useDisclosure>>(SELECT_TOKEN_MODAL)
+    useSingletonHook<ReturnType<typeof useDisclosure>>(SELECT_TOKEN_SWAP_MODAL)
 
     const warningText = {
         [PlatformKey.Aptos]:
@@ -47,8 +48,8 @@ export const SelectTokenModal = () => {
     }
 
     const formik =
-    useSingletonHook2<ReturnType<typeof useCreatePairFormik>>(
-        CREATE_PAIR_FORMIK
+    useSingletonHook2<ReturnType<typeof useSwapFormik>>(
+        SWAP_FORMIK
     )
 
     const { swrMutation } = useSingletonHook<

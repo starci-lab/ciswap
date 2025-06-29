@@ -4,6 +4,7 @@ import { Navbar, Swap, CreatePair } from "../components"
 import { Card, CardBody, Tab, Tabs } from "@heroui/react"
 import { useAppDispatch, useAppSelector } from "@/redux"
 import { HomeTab, setHomeTab } from "@/redux/slices"
+import { AddLiquidity } from "@/components/AddLiquidity"
 
 const Page = () => {
     const dispatch = useAppDispatch()
@@ -15,8 +16,8 @@ const Page = () => {
             return <Swap />
         case HomeTab.CreatePair:
             return <CreatePair />
-        case HomeTab.Earn:
-            return <div />
+        case HomeTab.AddLiquidity:
+            return <AddLiquidity />
         }
     }
 
@@ -29,9 +30,9 @@ const Page = () => {
             >
                 <Tab key={HomeTab.Swap} title="Swap" />
                 <Tab key={HomeTab.CreatePair} title="Create Pair" />
-                <Tab key={HomeTab.Earn} title="Earn" />
+                <Tab key={HomeTab.AddLiquidity} title="Add Liquidity" />
             </Tabs>
-            <Card>
+            <Card className="max-w-[500px] mx-auto">
                 <CardBody>
                     {renderContent()}
                 </CardBody>

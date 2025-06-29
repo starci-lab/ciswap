@@ -1,26 +1,19 @@
 "use client"
 import React from "react"
-import { Button, NumberInput, Snippet, Spacer } from "@heroui/react"
+import { Button, Input, NumberInput, Spacer } from "@heroui/react"
 import {
-    CREATE_PAIR_FORMIK,
-    GET_POOL_METADATA_SWR,
-    useCreatePairFormik,
-    useGetPoolMetadataSwr,
-    useSingletonHook,
+    ADD_LIQUIDITY_FORMIK,
+    useAddLiquidityFormik,
     useSingletonHook2,
 } from "@/singleton"
 import { SelectTokenModalKey } from "@/redux"
 import { PlusIcon } from "@phosphor-icons/react"
-import { SelectTokenButton } from "./SelectTokenButton"
 import { Title } from "../Title"
-import { truncateString } from "@/utils"
-export const CreatePair = () => {
+import { SelectTokenButton } from "./SelectTokenButton"
+export const AddLiquidity = () => {
     const formik =
-    useSingletonHook2<ReturnType<typeof useCreatePairFormik>>(
-        CREATE_PAIR_FORMIK
-    )
-    const { swr } = useSingletonHook<ReturnType<typeof useGetPoolMetadataSwr>>(
-        GET_POOL_METADATA_SWR
+    useSingletonHook2<ReturnType<typeof useAddLiquidityFormik>>(
+        ADD_LIQUIDITY_FORMIK
     )
     return (
         <div>
@@ -32,41 +25,49 @@ export const CreatePair = () => {
                 <SelectTokenButton tokenKey={SelectTokenModalKey.TokenB} />
             </div>
             <Spacer y={4} />
-            <Title text="Provide virtual tokens" />
+            <Title text="Select pool" />
+            <Spacer y={1.5} />
+            <Input
+                errorMessage={formik.errors.poolAddress}
+                isInvalid={!!formik.errors.poolAddress}
+                label=""
+                labelPlacement="outside"
+                value={formik.values.poolAddress}
+                onValueChange={(value) => formik.setFieldValue("poolAddress", value)}
+            />
+            <Spacer y={4} />
+            <Title text="Provide amount of tokens" />
             <Spacer y={1.5} />
             <div className="flex items-center gap-2">
                 <NumberInput
                     isDisabled={!formik.values.token0Metadata?.symbol}
-                    value={formik.values.token0Metadata?.symbol ? formik.values.amount0 : 0}
+                    value={
+                        formik.values.token0Metadata?.symbol ? formik.values.amount0 : 0
+                    }
                     onValueChange={(value) => formik.setFieldValue("amount0", value)}
                     label=""
                     labelPlacement="outside"
                     endContent={
-                        formik.values.token0Metadata && <div className="text-sm text-foreground-500">{`ci${formik.values.token0Metadata?.symbol}`}</div>
+                        formik.values.token0Metadata && (
+                            <div className="text-sm text-foreground-500">{`${formik.values.token0Metadata?.symbol}`}</div>
+                        )
                     }
                 />
                 <PlusIcon className="w-10 h-10" />
                 <NumberInput
                     isDisabled={!formik.values.token1Metadata?.symbol}
-                    value={formik.values.token1Metadata?.symbol ? formik.values.amount1 : 0}
+                    value={
+                        formik.values.token1Metadata?.symbol ? formik.values.amount1 : 0
+                    }
                     onValueChange={(value) => formik.setFieldValue("amount1", value)}
                     label=""
                     labelPlacement="outside"
                     endContent={
-                        formik.values.token1Metadata && <div className="text-sm text-foreground-500">{`ci${formik.values.token1Metadata?.symbol}`}</div>
+                        formik.values.token1Metadata && (
+                            <div className="text-sm text-foreground-500">{`${formik.values.token1Metadata?.symbol}`}</div>
+                        )
                     }
                 />
-            </div>
-            <Spacer y={4} />
-            <Title text="Pool address" />
-            <Spacer y={1.5} />
-            <Snippet hideSymbol fullWidth codeString={formik.values.poolAddress}>
-                {truncateString(formik.values.poolAddress, 10)}
-            </Snippet>
-            <Spacer y={4} />
-            <div className="flex items-center justify-between">
-                <Title text="Creation fee" />
-                <div className="text-sm text-foreground-500">{`${swr.data?.poolCreationFee} APT`}</div>
             </div>
             <Spacer y={4} />
             <Button
@@ -75,7 +76,7 @@ export const CreatePair = () => {
                 onPress={() => formik.handleSubmit()}
                 isLoading={formik.isSubmitting}
             >
-        Create Pair
+                Add Liquidity
             </Button>
         </div>
     )
