@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect } from "react"
 import {
-    Button,
     Input,
     Spacer,
     Spinner,
@@ -11,13 +10,13 @@ import {
 import {
     ADD_LIQUIDITY_FORMIK,
     GET_LP_NFT_SWR,
-    GET_POOL_INFO_SWR,
+    GET_POOL_INFO_SWR_MUTATION,
     GET_POOL_METADATA_SWR,
     GET_TOKEN_BALANCE_SWR,
     useAddLiquidityFormik,
     useGetBalanceSwrMutation,
     useGetLPNFTSwr,
-    useGetPoolInfoSwr,
+    useGetPoolInfoSwrMutation,
     useGetPoolMetadataSwr,
     useSingletonHook,
     useSingletonHook2,
@@ -36,7 +35,7 @@ export const AddLiquidity = () => {
         ADD_LIQUIDITY_FORMIK
     )
     const { swrMutation } =
-    useSingletonHook<ReturnType<typeof useGetPoolInfoSwr>>(GET_POOL_INFO_SWR)
+    useSingletonHook<ReturnType<typeof useGetPoolInfoSwrMutation>>(GET_POOL_INFO_SWR_MUTATION)
     const { swr: poolMetadataSwr } = useSingletonHook<
     ReturnType<typeof useGetPoolMetadataSwr>
   >(GET_POOL_METADATA_SWR)
@@ -177,15 +176,6 @@ export const AddLiquidity = () => {
             {swrMutation.data?.loaded && !swrMutation.isMutating ? (
                 renderTab()
             ) : null}
-            <Spacer y={4} />
-            <Button
-                color="primary"
-                fullWidth
-                onPress={() => formik.handleSubmit()}
-                isLoading={formik.isSubmitting}
-            >
-        Add Liquidity
-            </Button>
         </div>
     )
 }

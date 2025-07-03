@@ -9,18 +9,18 @@ import {
     SELECT_TOKEN_SWAP_MODAL,
     APTOS_MOVE_CALL_SWR_MUTATION,
     QUOTE_PRICE_OUT_SWR_MUTATION,
-    GET_POOL_INFO_SWR,
     GET_TOKEN_BALANCE_SWR,
     GET_LP_NFT_SWR,
+    GET_POOL_INFO_SWR_MUTATION,
 } from "../../keys"
 import {
     useGetPoolMetadataSwr,
     useGetTokenMetadataSwrMutation,
     useAptosMoveCallSwrMutation,
     useQuotePriceOutSwrMutation,
-    useGetPoolInfoSwr,
     useGetBalanceSwrMutation,
     useGetLPNFTSwr,
+    useGetPoolInfoSwrMutation,
 } from "../../swrs"
 import {
     GET_TOKEN_METADATA_SWR_MUTATION,
@@ -41,7 +41,7 @@ export const SingletonHookProvider = ({ children }: PropsWithChildren) => (
             [APTOS_MOVE_CALL_SWR_MUTATION]: useAptosMoveCallSwrMutation(),
             [GET_POOL_METADATA_SWR]: useGetPoolMetadataSwr(),
             [QUOTE_PRICE_OUT_SWR_MUTATION]: useQuotePriceOutSwrMutation(),
-            [GET_POOL_INFO_SWR]: useGetPoolInfoSwr(),
+            [GET_POOL_INFO_SWR_MUTATION]: useGetPoolInfoSwrMutation(),
             [GET_TOKEN_BALANCE_SWR]: useGetBalanceSwrMutation(),
             [GET_LP_NFT_SWR]: useGetLPNFTSwr(),
         }}

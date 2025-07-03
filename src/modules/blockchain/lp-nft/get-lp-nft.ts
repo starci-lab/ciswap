@@ -13,8 +13,36 @@ export interface GetLPNFTParams {
   accountAddress: string;
 }
 
+export interface Position {
+  poolId: number; // Pool this position belongs to
+  kSqrtAdded: number; // Amount of liquidity provided (sqrt K)
+  feeGrowthInsideX128: bigint; // Fee growth for X at the time of mint
+  feeGrowthInsideY128: bigint; // Fee growth for Y at the time of mint
+  feeGrowthInsideDebtX128: bigint; // Fee growth for virtual X at the time of mint
+  feeGrowthInsideDebtY128: bigint; // Fee growth for virtual Y at the time of mint
+  name: string; // Name of the NFT
+  tokenId: string; // Token ID of the NFT
+}
+
+export interface MovePosition {
+  k_sqrt_added: number; // Amount of liquidity provided (sqrt K)
+  fee_growth_inside_x: number; // Fee growth for X at the time of mint
+  fee_growth_inside_y: number; // Fee growth for Y at the time of mint
+  fee_growth_inside_debt_x: number; // Fee growth for virtual X at the time of mint
+  fee_growth_inside_debt_y: number; // Fee growth for virtual Y at the time of mint
+}
+
 export interface GetLPNFTResponse {
-  position: number;
+  positions: Array<Position>;
+}
+
+export interface CollectionMetadata {
+    collection_addr: string, // Address of the collection
+    name: string, // Name of the collection
+    positions: {
+        handle: string,
+    }
+    next_nft_id: number // Next NFT ID to use for minting
 }
 
 export const getAptosLPNFT = async ({
@@ -56,6 +84,9 @@ export const getAptosLPNFT = async ({
           }
         ) {
           token_data_id
+          current_token_data {
+            token_name
+          }
         }
       }
     `,
@@ -64,10 +95,51 @@ export const getAptosLPNFT = async ({
             collectionId: collection.collection_id,
         },
     })
-    const tokenData = await aptosClient.getDigitalAssetData({digitalAssetAddress: data.current_token_ownerships_v2[0].token_data_id})
-    console.log(tokenData)
+    const metadatas = await aptosClient.getAccountResource({
+        accountAddress: APTOS_SWAP_RESOURCE_ACCOUNT,
+        resourceType: `${APTOS_SWAP_RESOURCE_ACCOUNT}::position::CollectionMetadatas`,
+    })
+    const metadata = await aptosClient.table.getTableItem<CollectionMetadata>({
+        handle: metadatas.metadatas.handle,
+        data: {
+            key: poolId.toString(),
+            key_type: "u64",
+            value_type: `${APTOS_SWAP_RESOURCE_ACCOUNT}::position::CollectionMetadata`,
+        }
+    })
+    const positionsHandle = metadata.positions.handle
+    const positions: Array<Position> = []
+    const promises: Array<Promise<void>> = []
+    for (const item of data.current_token_ownerships_v2) {
+        const promise = async () => {
+            const tokenData = await aptosClient.getDigitalAssetData({
+                digitalAssetAddress: item.token_data_id,
+            })
+            const position = await aptosClient.table.getTableItem<MovePosition>({
+                handle: positionsHandle,
+                data: {
+                    key: tokenData.token_data_id,
+                    key_type: "address",
+                    value_type: `${APTOS_SWAP_RESOURCE_ACCOUNT}::position::Position`,
+                }
+            })
+            positions.push({
+                name: item.current_token_data.token_name,
+                tokenId: tokenData.token_data_id,
+                kSqrtAdded: position.k_sqrt_added,
+                feeGrowthInsideX128: BigInt(position.fee_growth_inside_x),
+                feeGrowthInsideY128: BigInt(position.fee_growth_inside_y),
+                feeGrowthInsideDebtX128: BigInt(position.fee_growth_inside_debt_x),
+                feeGrowthInsideDebtY128: BigInt(position.fee_growth_inside_debt_y),
+                poolId: poolId,
+            })
+        }
+        promises.push(promise())
+    }
+    await Promise.all(promises)
+    console.log(positions)
     return {
-        position: 0,
+        positions,
     }
 }
 

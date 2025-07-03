@@ -7,13 +7,13 @@ export interface UseGetPoolInfoSwrParams {
   poolId: number;
 }
 
-export const useGetPoolInfoSwr = (): UseSWRMutation<
+export const useGetPoolInfoSwrMutation = (): UseSWRMutation<
   PoolInfo,
   UseGetPoolInfoSwrParams
 > => {
     const chainKey = useAppSelector((state) => state.chainReducer.chainKey)
     const swrMutation = useSWRMutation(
-        "POOL_INFO",
+        "POOL_INFO_MUTATION",
         async (_, { arg }: { arg: UseGetPoolInfoSwrParams }) =>
             getPoolInfo({ chainKey, poolId: arg.poolId })
     )
