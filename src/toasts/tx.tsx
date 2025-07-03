@@ -13,7 +13,7 @@ export const addTxToast = ({ txHash, network }: AddTxToastParams) => {
     {
         [ChainKey.Aptos]: {
             [Network.Mainnet]: "mainnet",
-            [Network.Testnet]: "devnet",
+            [Network.Testnet]: "testnet",
         },
     }
     return addToast({

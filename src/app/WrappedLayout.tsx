@@ -15,12 +15,14 @@ import { Network } from "@/types"
 export const ContentLayout = ({ children }: PropsWithChildren) => {
     const network = useAppSelector((state) => state.chainReducer.network)
     const _network =
-    network === Network.Mainnet ? AptosNetwork.MAINNET : AptosNetwork.DEVNET
+    network === Network.Mainnet ? AptosNetwork.MAINNET : AptosNetwork.TESTNET
     return (
         <Suspense>
             <AptosWalletAdapterProvider
                 autoConnect={true}
-                dappConfig={{ network: _network }}
+                dappConfig={{ network: _network, aptosApiKeys: {
+                    [Network.Testnet]: "AG-B4TUGAXCWBWRTYN7JCPI8FDKS9PVVFP1Z",
+                }}}
                 onError={(error) => {
                     console.log("error", error)
                 }}

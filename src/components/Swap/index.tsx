@@ -27,7 +27,7 @@ export const Swap = () => {
     
     const searchParams = useSearchParams()
     const token0 = searchParams.get("token0") || "0x1::aptos_coin::AptosCoin"
-    const token1 = searchParams.get("token1") || "0x47883f36a846dfcc048977a80c0fb6c0d188f37d1fa159402f701bd084307450"
+    const token1 = searchParams.get("token1") || "0xffbd7560161ea26468a482555669eec1f28f7fb1d985aa44e0a58413b267ce78"
     const zeroForOne = Boolean(searchParams.get("zeroForOne") || "true")
     
     const { swrMutation: getTokenMetadataSwrMutation } = useSingletonHook<
