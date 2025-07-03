@@ -15,11 +15,13 @@ export enum AddLiquidityTab {
 export interface MainSlice {
     homeTab: HomeTab
     addLiquidityTab: AddLiquidityTab
+    poolId: number
 }
 
 const initialState: MainSlice = {
     homeTab: HomeTab.Swap,
     addLiquidityTab: AddLiquidityTab.Deposit,
+    poolId: 0,
 }
 
 export const homeSlice = createSlice({
@@ -32,8 +34,11 @@ export const homeSlice = createSlice({
         setAddLiquidityTab: (state, action) => {
             state.addLiquidityTab = action.payload
         },
+        setPoolId: (state, action) => {
+            state.poolId = action.payload
+        },
     },
 })
 
 export const homeReducer = homeSlice.reducer
-export const { setHomeTab, setAddLiquidityTab } = homeSlice.actions
+export const { setHomeTab, setAddLiquidityTab, setPoolId } = homeSlice.actions

@@ -10,9 +10,13 @@ import {
 } from "@heroui/react"
 import {
     ADD_LIQUIDITY_FORMIK,
+    GET_LP_NFT_SWR,
     GET_POOL_INFO_SWR,
     GET_POOL_METADATA_SWR,
+    GET_TOKEN_BALANCE_SWR,
     useAddLiquidityFormik,
+    useGetBalanceSwrMutation,
+    useGetLPNFTSwr,
     useGetPoolInfoSwr,
     useGetPoolMetadataSwr,
     useSingletonHook,
@@ -21,9 +25,10 @@ import {
 import { Title } from "../Title"
 import { TokenType } from "@/modules/blockchain/pool/info"
 import { isAptosLegacyType } from "@/utils"
-import { AddLiquidityTab, setAddLiquidityTab, useAppDispatch, useAppSelector } from "@/redux"
+import { AddLiquidityTab, setAddLiquidityTab, setPoolId, useAppDispatch, useAppSelector } from "@/redux"
 import { Deposit } from "./Deposit"
 import { Positions } from "./Positions"
+import { useWallet } from "@aptos-labs/wallet-adapter-react"
 
 export const AddLiquidity = () => {
     const formik =
@@ -74,14 +79,70 @@ export const AddLiquidity = () => {
             return <Positions />
         }
     }
+    
     const dispatch = useAppDispatch()
+    const poolId = useAppSelector((state) => state.homeReducer.poolId)
+
+    const { swrMutation: lpNftSwrMutation } =
+    useSingletonHook<ReturnType<typeof useGetLPNFTSwr>>(GET_LP_NFT_SWR)
+    useEffect(() => {
+        if (poolId === undefined) return 
+        const handleEffect = async () => {
+            await lpNftSwrMutation.trigger({ poolId })
+        }
+        handleEffect()
+    }, [poolId])
+
+    const { account } = useWallet()
+    const { swrMutation: getBalanceSwrMutation } =
+    useSingletonHook<ReturnType<typeof useGetBalanceSwrMutation>>(GET_TOKEN_BALANCE_SWR)
+    useEffect(() => {
+        if (poolId === undefined) { 
+            return
+        }
+        const handleEffect = async () => {
+            await swrMutation.trigger({
+                poolId,
+            })
+        }
+        handleEffect()
+    }, [poolId])
+
+    useEffect(() => {
+        if (formik.values.token0Address && account?.address) {
+            const handleEffect = async () => {
+                const { balance } = await getBalanceSwrMutation.trigger({
+                    tokenAddress: formik.values.token0Address,
+                    accountAddress: account?.address.toString(),
+                    isTypeTag: formik.values.isToken0Legacy,
+                })
+                formik.setFieldValue("balance0", balance)
+            }
+            handleEffect()
+        }
+    }, [formik.values.token0Address])
+
+    useEffect(() => {
+        if (formik.values.token1Address && account?.address) {
+            const handleEffect = async () => {
+                const { balance } = await getBalanceSwrMutation.trigger({
+                    tokenAddress: formik.values.token1Address,
+                    accountAddress: account?.address.toString(),
+                    isTypeTag: formik.values.isToken1Legacy,
+                })
+                formik.setFieldValue("balance1", balance)
+            }
+            handleEffect()
+        }
+    }, [formik.values.token1Address])
+
     return (
         <div>
             <Title text="Select pool" />
             <Spacer y={1.5} />
             <Input
-                errorMessage={formik.errors.poolId}
-                isInvalid={!!formik.errors.poolId}
+                errorMessage={poolId?.toString()}
+                isInvalid={!!poolId}
                 label=""
                 min={0}
                 description={`Pool ID available range: 0 - ${
@@ -95,8 +156,8 @@ export const AddLiquidity = () => {
                         : 0
                 }
                 labelPlacement="outside"
-                value={formik.values.poolId?.toString() || ""}
-                onValueChange={(value) => formik.setFieldValue("poolId", Number(value))}
+                value={poolId?.toString() || ""}
+                onValueChange={(value) => dispatch(setPoolId(Number(value)))}
             />
             <Spacer y={4} />
             <Tabs

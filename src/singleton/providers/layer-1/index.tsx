@@ -11,6 +11,7 @@ import {
     QUOTE_PRICE_OUT_SWR_MUTATION,
     GET_POOL_INFO_SWR,
     GET_TOKEN_BALANCE_SWR,
+    GET_LP_NFT_SWR,
 } from "../../keys"
 import {
     useGetPoolMetadataSwr,
@@ -19,6 +20,7 @@ import {
     useQuotePriceOutSwrMutation,
     useGetPoolInfoSwr,
     useGetBalanceSwrMutation,
+    useGetLPNFTSwr,
 } from "../../swrs"
 import {
     GET_TOKEN_METADATA_SWR_MUTATION,
@@ -41,6 +43,7 @@ export const SingletonHookProvider = ({ children }: PropsWithChildren) => (
             [QUOTE_PRICE_OUT_SWR_MUTATION]: useQuotePriceOutSwrMutation(),
             [GET_POOL_INFO_SWR]: useGetPoolInfoSwr(),
             [GET_TOKEN_BALANCE_SWR]: useGetBalanceSwrMutation(),
+            [GET_LP_NFT_SWR]: useGetLPNFTSwr(),
         }}
     >
         {children}

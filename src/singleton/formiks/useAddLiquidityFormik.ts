@@ -1,16 +1,12 @@
 import { FormikProps, useFormik } from "formik"
 import * as Yup from "yup" // Import Yup
-import { APTOS_MOVE_CALL_SWR_MUTATION, GET_TOKEN_BALANCE_SWR } from "../keys"
+import { APTOS_MOVE_CALL_SWR_MUTATION } from "../keys"
 import { useSingletonHook } from "../core"
-import { useAptosMoveCallSwrMutation, useGetBalanceSwrMutation } from "../swrs"
+import { useAptosMoveCallSwrMutation } from "../swrs"
 import { APTOS_SWAP_RESOURCE_ACCOUNT } from "@/config"
 import { computeRaw } from "@/utils"
 import { addErrorToast, addTxToast } from "@/toasts"
 import { useAppSelector } from "@/redux"
-import { GET_POOL_INFO_SWR } from "../keys"
-import { useGetPoolInfoSwr } from "../swrs"
-import { useEffect } from "react"
-import { useWallet } from "@aptos-labs/wallet-adapter-react"
 
 export interface AddLiquidityFormikValues {
   amount0: number;
@@ -21,7 +17,6 @@ export interface AddLiquidityFormikValues {
   token1Address: string;
   isToken0Legacy: boolean;
   isToken1Legacy: boolean;
-  poolId?: number;
 }
 
 export const useAddLiquidityFormik =
@@ -56,24 +51,14 @@ export const useAddLiquidityFormik =
               .required("Amount is required")
               .test("lte-balance1", "Amount exceeds balance", function (value) {
                   return value === undefined || value <= this.parent.balance1
-              }),
-          poolId: Yup.number().required("Pool id is required"),
+              })
       })
       const network = useAppSelector((state) => state.chainReducer.network)
-
-      const { swrMutation: getPoolInfoSwrMutation } =
-      useSingletonHook<ReturnType<typeof useGetPoolInfoSwr>>(GET_POOL_INFO_SWR)
-
-      const { swrMutation: getBalanceSwrMutation } = useSingletonHook<
-      ReturnType<typeof useGetBalanceSwrMutation>
-    >(GET_TOKEN_BALANCE_SWR)
-
-      const { account } = useWallet()
-
+      const poolId = useAppSelector((state) => state.homeReducer.poolId)
       const formik = useFormik({
           initialValues,
           validationSchema, // Pass Yup validation schema directly
-          onSubmit: async ({ amount0, amount1, poolId }) => {
+          onSubmit: async ({ amount0, amount1 }) => {
               try {
                   // onpen the sign transaction moda
                   const data = await swrMutation.trigger({
@@ -91,46 +76,6 @@ export const useAddLiquidityFormik =
               }
           },
       })
-
-      useEffect(() => {
-          if (formik.values.poolId === undefined) { 
-              return
-          }
-          const handleEffect = async () => {
-              await getPoolInfoSwrMutation.trigger({
-                  poolId: formik.values.poolId as number,
-              })
-          }
-          handleEffect()
-      }, [formik.values.poolId])
-
-      useEffect(() => {
-          if (formik.values.token0Address && account?.address) {
-              const handleEffect = async () => {
-                  const { balance } = await getBalanceSwrMutation.trigger({
-                      tokenAddress: formik.values.token0Address,
-                      accountAddress: account?.address.toString(),
-                      isTypeTag: formik.values.isToken0Legacy,
-                  })
-                  formik.setFieldValue("balance0", balance)
-              }
-              handleEffect()
-          }
-      }, [formik.values.token0Address])
-
-      useEffect(() => {
-          if (formik.values.token1Address && account?.address) {
-              const handleEffect = async () => {
-                  const { balance } = await getBalanceSwrMutation.trigger({
-                      tokenAddress: formik.values.token1Address,
-                      accountAddress: account?.address.toString(),
-                      isTypeTag: formik.values.isToken1Legacy,
-                  })
-                  formik.setFieldValue("balance1", balance)
-              }
-              handleEffect()
-          }
-      }, [formik.values.token1Address])
 
       return formik
   }
