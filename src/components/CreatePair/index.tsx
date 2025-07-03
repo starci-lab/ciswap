@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import { Button, NumberInput, Snippet, Spacer } from "@heroui/react"
+import { Button, Input, NumberInput, Spacer } from "@heroui/react"
 import {
     CREATE_PAIR_FORMIK,
     GET_POOL_METADATA_SWR,
@@ -13,7 +13,6 @@ import { SelectTokenModalKey } from "@/redux"
 import { PlusIcon } from "@phosphor-icons/react"
 import { SelectTokenButton } from "./SelectTokenButton"
 import { Title } from "../Title"
-import { truncateString } from "@/utils"
 export const CreatePair = () => {
     const formik =
     useSingletonHook2<ReturnType<typeof useCreatePairFormik>>(
@@ -32,7 +31,7 @@ export const CreatePair = () => {
                 <SelectTokenButton tokenKey={SelectTokenModalKey.TokenB} />
             </div>
             <Spacer y={4} />
-            <Title text="Provide virtual tokens" />
+            <Title text="Provide debt tokens" />
             <Spacer y={1.5} />
             <div className="flex items-center gap-2">
                 <NumberInput
@@ -40,6 +39,7 @@ export const CreatePair = () => {
                     value={formik.values.token0Metadata?.symbol ? formik.values.amount0 : 0}
                     onValueChange={(value) => formik.setFieldValue("amount0", value)}
                     label=""
+                    hideStepper
                     labelPlacement="outside"
                     endContent={
                         formik.values.token0Metadata && <div className="text-sm text-foreground-500">{`ci${formik.values.token0Metadata?.symbol}`}</div>
@@ -51,6 +51,7 @@ export const CreatePair = () => {
                     value={formik.values.token1Metadata?.symbol ? formik.values.amount1 : 0}
                     onValueChange={(value) => formik.setFieldValue("amount1", value)}
                     label=""
+                    hideStepper
                     labelPlacement="outside"
                     endContent={
                         formik.values.token1Metadata && <div className="text-sm text-foreground-500">{`ci${formik.values.token1Metadata?.symbol}`}</div>
@@ -58,11 +59,9 @@ export const CreatePair = () => {
                 />
             </div>
             <Spacer y={4} />
-            <Title text="Pool address" />
+            <Title text="Pool id" />
             <Spacer y={1.5} />
-            <Snippet hideSymbol fullWidth codeString={formik.values.poolAddress}>
-                {truncateString(formik.values.poolAddress, 10)}
-            </Snippet>
+            <Input readOnly isDisabled value={swr.data?.nextPoolId.toString()}/>
             <Spacer y={4} />
             <div className="flex items-center justify-between">
                 <Title text="Creation fee" />
@@ -72,6 +71,7 @@ export const CreatePair = () => {
             <Button
                 color="primary"
                 fullWidth
+                isDisabled={!formik.isValid}
                 onPress={() => formik.handleSubmit()}
                 isLoading={formik.isSubmitting}
             >

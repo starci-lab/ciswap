@@ -25,6 +25,7 @@ import { SelectTokenModalKey } from "@/redux"
 import { useAsyncList } from "@react-stately/data"
 import { TokenMetadata } from "@/modules/blockchain"
 import { TokenImage } from "@/components"
+import { isAptosLegacyType } from "@/utils"
 
 export const SelectTokenModal = () => {
     const selectedChainKey = useAppSelector(
@@ -38,7 +39,7 @@ export const SelectTokenModal = () => {
 
     const warningText = {
         [PlatformKey.Aptos]:
-      "For Aptos, token address is like 0x1::aptos_coin::AptosCoin",
+      "In Aptos, you can use both legacy (0x1::aptos_coin::AptosCoin) and fungible asset address (0x478...7450)",
         [PlatformKey.Solana]:
       "For Solana, token address is a base58 string like Hs1...2oFZ",
         [PlatformKey.Sui]: "For Sui, token address is like 0x2::sui::SUI",
@@ -72,10 +73,30 @@ export const SelectTokenModal = () => {
             return await new Promise((resolve) => {
                 timeoutRef.current = setTimeout(async () => {
                     try {
+                        const isTypeTag = isAptosLegacyType(filterText)
                         const data = await swrMutation.trigger({
                             tokenAddress: filterText || "",
                             signal,
+                            isTypeTag,
                         })
+                        if (!data) {
+                            throw new Error("Token not found")
+                        }
+                        // if pass this, mean query is success
+                        // checl if aptos token is legacy
+                        if (isTypeTag) {
+                            if (tokenKey === SelectTokenModalKey.TokenA) {
+                                formik.setFieldValue("isToken0Legacy", true)
+                            } else {
+                                formik.setFieldValue("isToken1Legacy", true)
+                            }
+                        } else {
+                            if (tokenKey === SelectTokenModalKey.TokenA) {
+                                formik.setFieldValue("isToken0Legacy", false)
+                            } else {
+                                formik.setFieldValue("isToken1Legacy", false)
+                            }
+                        }
                         resolve({
                             items: data ? [data] : [],
                         })

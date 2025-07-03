@@ -1,5 +1,6 @@
 import { ChainKey, Network, TokenKey } from "@/types"
 import { createAptosClient } from "../rpcs"
+import { GetFungibleAssetMetadataResponse } from "@aptos-labs/ts-sdk"
 
 export interface GetTokenMetadataParams {
   chainKey: ChainKey;
@@ -8,6 +9,7 @@ export interface GetTokenMetadataParams {
   //use tokenKey incase you want to get balance of a defined token, if tokenKey is set, tokenAddress will be ignored
   tokenKey?: TokenKey;
   network?: Network;
+  isTypeTag?: boolean;
 }
 
 export interface TokenMetadata {
@@ -15,22 +17,39 @@ export interface TokenMetadata {
     symbol: string
     decimals: number
     imageUrl: string
+    tokenAddress?: string
 }
 
 export const getAptosTokenMetadata = async ({
     tokenAddress,
     network,
+    isTypeTag,
 }: GetTokenMetadataParams): Promise<TokenMetadata> => {
     if (!tokenAddress)
         throw new Error("Cannot find token metadata without token address")
     const aptosClient = createAptosClient(network)
-    const tokenMetadata = await aptosClient.getFungibleAssetMetadataByAssetType({ assetType: tokenAddress })
+    let tokenMetadata: GetFungibleAssetMetadataResponse[0]
+    if (isTypeTag) {
+        tokenMetadata = await aptosClient.getFungibleAssetMetadataByAssetType({ 
+            assetType: tokenAddress,
+        })
+    } else {
+        const metadata = await aptosClient.view({
+            payload: {
+                function: "0x1::fungible_asset::metadata",
+                functionArguments: [tokenAddress],
+                typeArguments: ["0x1::object::ObjectCore"],
+            },
+        })
+        tokenMetadata = metadata[0] as GetFungibleAssetMetadataResponse[0]
+    }
     const { name, symbol, decimals, icon_uri } = tokenMetadata
     return {
         name,
         symbol,
         decimals,
         imageUrl: icon_uri || "",
+        tokenAddress,
     }
 }
 

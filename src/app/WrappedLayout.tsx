@@ -1,6 +1,6 @@
 "use client"
-import React, { PropsWithChildren } from "react"
-import { HeroUIProvider } from "@heroui/react"
+import React, { PropsWithChildren, Suspense } from "react"
+import { HeroUIProvider, ToastProvider } from "@heroui/react"
 import { Provider as ReduxProvider } from "react-redux"
 import { store, useAppSelector } from "@/redux"
 import dynamic from "next/dynamic"
@@ -17,27 +17,30 @@ export const ContentLayout = ({ children }: PropsWithChildren) => {
     const _network =
     network === Network.Mainnet ? AptosNetwork.MAINNET : AptosNetwork.DEVNET
     return (
-        <AptosWalletAdapterProvider
-            autoConnect={true}
-            dappConfig={{ network: _network }}
-            onError={(error) => {
-                console.log("error", error)
-            }}
-        >
-            <HeroUIProvider>
-                <SingletonHookProvider>
-                    <SingletonHook2Provider>
-                        <IconContext.Provider
-                            value={{
-                                size: 20,
-                            }}
-                        >
-                            {children}
-                        </IconContext.Provider>
-                    </SingletonHook2Provider>
-                </SingletonHookProvider>
-            </HeroUIProvider>
-        </AptosWalletAdapterProvider>
+        <Suspense>
+            <AptosWalletAdapterProvider
+                autoConnect={true}
+                dappConfig={{ network: _network }}
+                onError={(error) => {
+                    console.log("error", error)
+                }}
+            >
+                <HeroUIProvider>
+                    <SingletonHookProvider>
+                        <SingletonHook2Provider>
+                            <IconContext.Provider
+                                value={{
+                                    size: 20,
+                                }}
+                            >
+                                {children}
+                                <ToastProvider />
+                            </IconContext.Provider>
+                        </SingletonHook2Provider>
+                    </SingletonHookProvider>
+                </HeroUIProvider>
+            </AptosWalletAdapterProvider>
+        </Suspense>
     )
 }
 export const WrappedLayout = ({ children }: PropsWithChildren) => {

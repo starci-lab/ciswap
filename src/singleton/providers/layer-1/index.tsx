@@ -9,15 +9,21 @@ import {
     SELECT_TOKEN_SWAP_MODAL,
     APTOS_MOVE_CALL_SWR_MUTATION,
     QUOTE_PRICE_OUT_SWR_MUTATION,
+    GET_POOL_INFO_SWR,
+    GET_TOKEN_BALANCE_SWR,
 } from "../../keys"
 import {
     useGetPoolMetadataSwr,
-    GET_POOL_METADATA_SWR,
     useGetTokenMetadataSwrMutation,
-    GET_TOKEN_METADATA_SWR_MUTATION,
     useAptosMoveCallSwrMutation,
     useQuotePriceOutSwrMutation,
-} from "@/singleton"
+    useGetPoolInfoSwr,
+    useGetBalanceSwrMutation,
+} from "../../swrs"
+import {
+    GET_TOKEN_METADATA_SWR_MUTATION,
+    GET_POOL_METADATA_SWR,
+} from "../../keys"
 
 export const SingletonHookProvider = ({ children }: PropsWithChildren) => (
     <BaseSingletonHookProvider
@@ -33,6 +39,8 @@ export const SingletonHookProvider = ({ children }: PropsWithChildren) => (
             [APTOS_MOVE_CALL_SWR_MUTATION]: useAptosMoveCallSwrMutation(),
             [GET_POOL_METADATA_SWR]: useGetPoolMetadataSwr(),
             [QUOTE_PRICE_OUT_SWR_MUTATION]: useQuotePriceOutSwrMutation(),
+            [GET_POOL_INFO_SWR]: useGetPoolInfoSwr(),
+            [GET_TOKEN_BALANCE_SWR]: useGetBalanceSwrMutation(),
         }}
     >
         {children}

@@ -6,5 +6,8 @@ export const createAptosClient = (network?: Network) => {
     network === Network.Mainnet ? AptosNetwork.MAINNET : AptosNetwork.DEVNET
     return new Aptos(new AptosConfig({
         network: _network,
+        clientConfig: {
+            API_KEY: "AG-LORERGHT6C2QGIJFA7FD8GH4PTYRHMBAB"
+        }
     }))
 }

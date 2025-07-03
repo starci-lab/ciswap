@@ -1,5 +1,6 @@
 import numeral from "numeral"
 import dayjs from "dayjs"
+import { parseTypeTag } from "@aptos-labs/ts-sdk"
 
 export const NUMBER_PATTERN_1 = "0.00000a"
 export const NUMBER_PATTERN_2 = "0.0a"
@@ -71,4 +72,14 @@ export const sanitizeNumericInput = (input: string): string | null => {
     }
     const sanitizedValue = input.replace(/,/g, ".")
     return sanitizedValue
+}
+
+export const isAptosLegacyType = (tokenAddress: string) => {
+    try {
+        parseTypeTag(tokenAddress)
+        return true
+    } catch (error) {
+        console.error(error)
+        return false
+    }
 }

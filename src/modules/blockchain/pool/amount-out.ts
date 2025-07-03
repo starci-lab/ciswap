@@ -7,9 +7,7 @@ export interface GetAmountOutParams {
   chainKey: ChainKey;
   network?: Network;
   amountIn: number;
-  poolAddress: string;
-  token0: string;
-  token1: string;
+  poolId: number;
   zeroForOne: boolean;
 }
 
@@ -21,22 +19,20 @@ export interface GetAmountOutResult {
 export const getAptosAmountOut = async ({
     network,
     amountIn,
-    poolAddress,
-    token0,
-    token1,
+    poolId,
     zeroForOne,
 }: GetAmountOutParams): Promise<GetAmountOutResult> => {
     const aptosClient = createAptosClient(network)
+    console.log("poolId", poolId)
+    console.log("amountIn", amountIn)
+    console.log("zeroForOne", zeroForOne)
     const data = await aptosClient.view(
         {
             payload: {
                 function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::quoter::get_amount_out`,
-                typeArguments: [
-                    token0,
-                    token1,
-                ],
+                typeArguments: [],
                 functionArguments: [
-                    poolAddress,
+                    poolId,
                     computeRaw(amountIn),
                     zeroForOne,
                 ]

@@ -4,10 +4,8 @@ import { getAmountOut, GetAmountOutResult } from "@/modules/blockchain"
 import { UseSWRMutation } from "./types"
 
 export interface UseQuotePriceOutSwrParams {
-    token0: string
-    token1: string
     amountIn: number
-    poolAddress: string
+    poolId: number
     zeroForOne: boolean
 }
 // ciswap only allow you to quote amount out due to the virtualized liquidity
@@ -22,10 +20,8 @@ export const useQuotePriceOutSwrMutation = (): UseSWRMutation<
         async (_, { arg }: { arg: UseQuotePriceOutSwrParams }) =>
             getAmountOut({
                 chainKey,
-                token0: arg.token0,
-                token1: arg.token1,
                 amountIn: arg.amountIn,
-                poolAddress: arg.poolAddress,
+                poolId: arg.poolId,
                 zeroForOne: arg.zeroForOne,
                 network
             })

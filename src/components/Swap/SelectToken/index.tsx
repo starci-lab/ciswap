@@ -36,7 +36,7 @@ export const SelectToken = ({ tokenKey }: SelectTokenProps) => {
             }}
             className="text-start"
         >
-            <TokenImage src={metadata?.imageUrl} className="min-w-8 min-h-8" />
+            <TokenImage src={metadata?.imageUrl} className="min-w-8 min-h-8 w-8 h-8" />
             <div className="flex flex-col">
                 <div className="text-sm font-bold">{metadata?.symbol}</div>
                 <div className="text-xs text-foreground-500">{metadata?.name}</div>

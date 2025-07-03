@@ -6,6 +6,7 @@ import { UseSWRMutation } from "./types"
 export interface UseGetTokenMetadataSwrParams {
   tokenAddress: string;
   signal?: AbortSignal;
+  isTypeTag?: boolean;
 }
 
 export const useGetTokenMetadataSwrMutation = (): UseSWRMutation<
@@ -16,7 +17,7 @@ export const useGetTokenMetadataSwrMutation = (): UseSWRMutation<
     const swrMutation = useSWRMutation(
         "TOKEN_METADATA",
         async (_, { arg }: { arg: UseGetTokenMetadataSwrParams }) =>
-            getTokenMetadata({ chainKey, tokenAddress: arg.tokenAddress })
+            getTokenMetadata({ chainKey, tokenAddress: arg.tokenAddress, isTypeTag: arg.isTypeTag })
     )
     return {
         swrMutation,

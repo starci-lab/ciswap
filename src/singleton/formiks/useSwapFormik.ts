@@ -8,6 +8,8 @@ import { useAptosMoveCallSwrMutation } from "../swrs"
 import { APTOS_SWAP_RESOURCE_ACCOUNT } from "@/config"
 import { computeRaw } from "@/utils"
 import { useWallet } from "@aptos-labs/wallet-adapter-react"
+import { addErrorToast, addTxToast } from "@/toasts"
+import { useAppSelector } from "@/redux"
 
 export interface SwapFormikValues {
     token0: string
@@ -41,32 +43,38 @@ export const useSwapFormik = (): FormikProps<SwapFormikValues> => {
     // Yup validation schema
     const validationSchema = Yup.object({
         token0: Yup.string().required("Token 0 is required"),
-        token0Typed: Yup.string().required("Token 0 type is required"),
         token1: Yup.string().required("Token 1 is required"),
-        token1Typed: Yup.string().required("Token 1 type is required"),
-        poolAddress: Yup.string().optional(),
+        amountInString: Yup.string().required("Amount in is required"),
     })
 
     const { account } = useWallet()
-
+    const network = useAppSelector(state => state.chainReducer.network)
     const formik = useFormik({
         initialValues,
         validationSchema, // Pass Yup validation schema directly
-        onSubmit: async ({ token0, token1, amountInString, zeroForOne }) => {
+        onSubmit: async ({ amountInString, zeroForOne }) => {
+            try {
             // onpen the sign transaction moda
-            const data = await swrMutation.trigger({
-                function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::router::swap`,
-                functionArguments: [
-                    "0x5db4ea10cf9a35dfa26d4642625239a579a1666cf2046d7ec44221adf9fb2956",
-                    computeRaw(Number.parseFloat(amountInString ?? "0")), 
-                    zeroForOne,
-                    account?.address,
-                    0
-                ],
-                typeArguments: [token0, token1],
-            })
-            alert(data)
-            open()
+                const data = await swrMutation.trigger({
+                    function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::router::swap`,
+                    functionArguments: [
+                        0, // use pool 0, tech debt, will change later if smart router is implemented
+                        computeRaw(Number.parseFloat(amountInString ?? "0")), 
+                        zeroForOne,
+                        account?.address,
+                        0,
+                        0
+                    ],
+                    typeArguments: [],
+                })
+                addTxToast({
+                    txHash: data.hash,
+                    network
+                })
+            }
+            catch (error) {
+                addErrorToast(error as Error)
+            }
         },
     })
 

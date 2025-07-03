@@ -10,6 +10,7 @@ export interface GetPoolMetadataParams {
 
 export interface PoolMetadata {
     poolCreationFee: number
+    nextPoolId: number
 }
 
 export const getAptosPoolMetadata = async ({
@@ -23,7 +24,8 @@ export const getAptosPoolMetadata = async ({
         }
     )
     return {
-        poolCreationFee: computeDenomination(swapInfo.creation_fee_in_apt, 8)
+        poolCreationFee: computeDenomination(swapInfo.creation_fee_in_apt, 8),
+        nextPoolId: swapInfo.next_pool_id
     }
 }
 
