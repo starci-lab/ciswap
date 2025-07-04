@@ -1,6 +1,6 @@
 import { ChainKey, Network } from "@/types"
 import { createAptosClient } from "../rpcs"
-import { APTOS_SWAP_RESOURCE_ACCOUNT } from "@/config"
+import { buildAptosSwapFQN } from "@/config"
 import { computeDenomination, computeRaw } from "@/utils"
 
 export interface GetAmountOutParams {
@@ -23,13 +23,14 @@ export const getAptosAmountOut = async ({
     zeroForOne,
 }: GetAmountOutParams): Promise<GetAmountOutResult> => {
     const aptosClient = createAptosClient(network)
-    console.log("poolId", poolId)
-    console.log("amountIn", amountIn)
-    console.log("zeroForOne", zeroForOne)
     const data = await aptosClient.view(
         {
             payload: {
-                function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::quoter::get_amount_out`,
+                function: buildAptosSwapFQN({
+                    network,
+                    moduleName: "quoter",
+                    functionNameOrResourceType: "get_amount_out",
+                }),
                 typeArguments: [],
                 functionArguments: [
                     poolId,

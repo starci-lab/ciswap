@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
-import { chainReducer, homeReducer, modalReducer } from "./slices"
+import { chainReducer, homeReducer, modalReducer, stateReducer } from "./slices"
 export const store = configureStore({
     reducer: {
         homeReducer,
         modalReducer,
         chainReducer,
+        stateReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false,

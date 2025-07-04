@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { use } from "react"
+import { useContext } from "react"
 import {
     BaseSingletonHook2Context,
     BaseSingletonHook3Context,
@@ -14,20 +14,20 @@ export type HookFn<HRT extends HookReturnType = any> = (
 export const useSingletonHook = <HRT extends HookReturnType>(
     name: string
 ): HRT => {
-    const { singletonHookRegistry } = use(BaseSingletonHookContext)!
+    const { singletonHookRegistry } = useContext(BaseSingletonHookContext)!
     return singletonHookRegistry[name]
 }
 
 export const useSingletonHook2 = <HRT extends HookReturnType>(
     name: string
 ): HRT => {
-    const { singletonHookRegistry } = use(BaseSingletonHook2Context)!
+    const { singletonHookRegistry } = useContext(BaseSingletonHook2Context)!
     return singletonHookRegistry[name]
 }
 
 export const useSingletonHook3 = <HRT extends HookReturnType>(
     name: string
 ): HRT => {
-    const { singletonHookRegistry } = use(BaseSingletonHook3Context)!
+    const { singletonHookRegistry } = useContext(BaseSingletonHook3Context)!
     return singletonHookRegistry[name]
 }

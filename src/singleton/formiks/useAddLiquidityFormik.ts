@@ -3,20 +3,21 @@ import * as Yup from "yup" // Import Yup
 import { APTOS_MOVE_CALL_SWR_MUTATION } from "../keys"
 import { useSingletonHook } from "../core"
 import { useAptosMoveCallSwrMutation } from "../swrs"
-import { APTOS_SWAP_RESOURCE_ACCOUNT } from "@/config"
 import { computeRaw } from "@/utils"
 import { addErrorToast, addTxToast } from "@/toasts"
 import { useAppSelector } from "@/redux"
+import { buildAptosSwapFQN } from "@/config"
+import { chainKeyToPlatformKey, PlatformKey } from "@/types"
 
 export interface AddLiquidityFormikValues {
-  amount0: number;
-  amount1: number;
-  balance0: number;
-  balance1: number;
-  token0Address: string;
-  token1Address: string;
-  isToken0Legacy: boolean;
-  isToken1Legacy: boolean;
+  amountX: number;
+  amountY: number;
+  balanceX: number;
+  balanceY: number;
+  tokenXAddress: string;
+  tokenYAddress: string;
+  isTokenXLegacy: boolean;
+  isTokenYLegacy: boolean;
 }
 
 export const useAddLiquidityFormik =
@@ -25,52 +26,64 @@ export const useAddLiquidityFormik =
       ReturnType<typeof useAptosMoveCallSwrMutation>
     >(APTOS_MOVE_CALL_SWR_MUTATION)
       const initialValues: AddLiquidityFormikValues = {
-          amount0: 100,
-          amount1: 100,
-          isToken0Legacy: true,
-          isToken1Legacy: true,
-          balance0: 0,
-          balance1: 0,
-          token0Address: "",
-          token1Address: "",
+          amountX: 100,
+          amountY: 100,
+          isTokenXLegacy: true,
+          isTokenYLegacy: true,
+          balanceX: 0,
+          balanceY: 0,
+          tokenXAddress: "",
+          tokenYAddress: "",
       }
       // Yup validation schema
       const validationSchema = Yup.object({
-          balance0: Yup.number()
+          balanceX: Yup.number()
               .required("Balance is required")
               .positive("Balance must be greater than 0"),
-          amount0: Yup.number()
+          amountX: Yup.number()
               .required("Amount is required")
-              .test("lte-balance0", "Amount exceeds balance", function (value) {
-                  return value === undefined || value <= this.parent.balance0
+              .test("lte-balanceX", "Amount exceeds balance", function (value) {
+                  return value === undefined || value <= this.parent.balanceX
               }),
-          balance1: Yup.number()
+          balanceY: Yup.number()
               .required("Balance is required")
               .positive("Balance must be greater than 0"),
-          amount1: Yup.number()
+          amountY: Yup.number()
               .required("Amount is required")
-              .test("lte-balance1", "Amount exceeds balance", function (value) {
-                  return value === undefined || value <= this.parent.balance1
+              .test("lte-balanceY", "Amount exceeds balance", function (value) {
+                  return value === undefined || value <= this.parent.balanceY
               })
       })
       const network = useAppSelector((state) => state.chainReducer.network)
       const poolId = useAppSelector((state) => state.homeReducer.poolId)
+      const chainKey = useAppSelector((state) => state.chainReducer.chainKey)
       const formik = useFormik({
           initialValues,
           validationSchema, // Pass Yup validation schema directly
-          onSubmit: async ({ amount0, amount1 }) => {
+          onSubmit: async ({ amountX, amountY }) => {
               try {
-                  // onpen the sign transaction moda
-                  const data = await swrMutation.trigger({
-                      function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::router::add_liquidity`,
-                      functionArguments: [
-                          poolId,
-                          computeRaw(amount0),
-                          computeRaw(amount1),
-                      ],
-                      typeArguments: [],
-                  })
-                  addTxToast({ txHash: data.hash, network })
+                  switch (chainKeyToPlatformKey[chainKey]) {
+                  case PlatformKey.Aptos: {
+                      // onpen the sign transaction moda
+                      const data = await swrMutation.trigger({
+                          function: buildAptosSwapFQN({
+                              network,
+                              moduleName: "router",
+                              functionNameOrResourceType: "add_liquidity",
+                          }),
+                          functionArguments: [
+                              poolId,
+                              computeRaw(amountX,),
+                              computeRaw(amountY),
+                          ],
+                          typeArguments: [],
+                      })
+                      addTxToast({ txHash: data.hash, network })
+                  }
+                      break
+                  default:
+                      throw new Error("Unsupported chain")
+                  }
               } catch (error) {
                   addErrorToast(error as Error)
               }

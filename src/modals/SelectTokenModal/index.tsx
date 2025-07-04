@@ -85,16 +85,16 @@ export const SelectTokenModal = () => {
                         // if pass this, mean query is success
                         // checl if aptos token is legacy
                         if (isTypeTag) {
-                            if (tokenKey === SelectTokenModalKey.TokenA) {
-                                formik.setFieldValue("isToken0Legacy", true)
+                            if (tokenKey === SelectTokenModalKey.TokenX) {
+                                formik.setFieldValue("isTokenXLegacy", true)
                             } else {
-                                formik.setFieldValue("isToken1Legacy", true)
+                                formik.setFieldValue("isTokenYLegacy", true)
                             }
                         } else {
-                            if (tokenKey === SelectTokenModalKey.TokenA) {
-                                formik.setFieldValue("isToken0Legacy", false)
+                            if (tokenKey === SelectTokenModalKey.TokenX) {
+                                formik.setFieldValue("isTokenXLegacy", false)
                             } else {
-                                formik.setFieldValue("isToken1Legacy", false)
+                                formik.setFieldValue("isTokenYLegacy", false)
                             }
                         }
                         resolve({
@@ -115,20 +115,20 @@ export const SelectTokenModal = () => {
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
                 <ModalHeader>
-          Select Token {tokenKey === SelectTokenModalKey.TokenA ? "A" : "B"}
+          Select Token {tokenKey === SelectTokenModalKey.TokenX ? "X" : "Y"}
                 </ModalHeader>
                 <ModalBody>
                     <Autocomplete
                         value={
-                            tokenKey === SelectTokenModalKey.TokenA
-                                ? formik.values.token0Typed
-                                : formik.values.token1Typed
+                            tokenKey === SelectTokenModalKey.TokenX
+                                ? formik.values.tokenXTyped
+                                : formik.values.tokenYTyped
                         }
                         onValueChange={(value) => {
-                            if (tokenKey === SelectTokenModalKey.TokenA) {
-                                formik.setFieldValue("token0Typed", value)
+                            if (tokenKey === SelectTokenModalKey.TokenX) {
+                                formik.setFieldValue("tokenXTyped", value)
                             } else {
-                                formik.setFieldValue("token1Typed", value)
+                                formik.setFieldValue("tokenYTyped", value)
                             }
                         }}
                         onInputChange={list.setFilterText}
@@ -163,13 +163,13 @@ export const SelectTokenModal = () => {
                         fullWidth
                         onPress={() => {
                             formik.setFieldValue(
-                                tokenKey === SelectTokenModalKey.TokenA ? "token0" : "token1",
-                                tokenKey === SelectTokenModalKey.TokenA
-                                    ? formik.values.token0Typed
-                                    : formik.values.token1Typed
+                                tokenKey === SelectTokenModalKey.TokenX ? "tokenX" : "tokenY",
+                                tokenKey === SelectTokenModalKey.TokenX
+                                    ? formik.values.tokenXTyped
+                                    : formik.values.tokenYTyped
                             )
                             formik.setFieldValue(
-                                tokenKey === SelectTokenModalKey.TokenA ? "token0Metadata" : "token1Metadata",
+                                tokenKey === SelectTokenModalKey.TokenX ? "tokenXMetadata" : "tokenYMetadata",
                                 list.items[0] || null
                             )
                             onClose()

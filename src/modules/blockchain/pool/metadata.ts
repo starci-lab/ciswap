@@ -1,7 +1,7 @@
 import { ChainKey, Network } from "@/types"
 import { createAptosClient } from "../rpcs"
-import { APTOS_SWAP_RESOURCE_ACCOUNT } from "@/config"
 import { computeDenomination } from "@/utils"
+import { aptosSwapResourceAccounts, buildAptosSwapFQN } from "@/config"
 
 export interface GetPoolMetadataParams {
   chainKey: ChainKey;
@@ -19,8 +19,12 @@ export const getAptosPoolMetadata = async ({
     const aptosClient = createAptosClient(network)
     const swapInfo = await aptosClient.getAccountResource(
         {
-            accountAddress: APTOS_SWAP_RESOURCE_ACCOUNT,
-            resourceType: `${APTOS_SWAP_RESOURCE_ACCOUNT}::swap::SwapInfo`,
+            accountAddress: aptosSwapResourceAccounts[network ?? Network.Mainnet],
+            resourceType: buildAptosSwapFQN({
+                network,
+                moduleName: "swap",
+                functionNameOrResourceType: "SwapInfo",
+            }),
         }
     )
     return {

@@ -34,3 +34,11 @@ export const platformKeyToChainKey = Object.fromEntries(
         chainKey,
     ])
 )
+
+export interface AptosMoveTableHandle {
+  handle: string
+}
+
+export interface AptosMoveObject {
+  inner: string
+}

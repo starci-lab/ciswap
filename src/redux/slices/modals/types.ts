@@ -1,4 +1,4 @@
 export enum SelectTokenModalKey {
-    TokenA = "tokenA",
-    TokenB = "tokenB",
+    TokenX = "tokenX",
+    TokenY = "tokenY",
 }

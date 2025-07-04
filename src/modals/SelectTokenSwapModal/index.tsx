@@ -95,20 +95,20 @@ export const SelectTokenSwapModal = () => {
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
                 <ModalHeader>
-          Select Token {tokenKey === SelectTokenModalKey.TokenA ? "A" : "B"}
+          Select Token {tokenKey === SelectTokenModalKey.TokenX ? "X" : "Y"}
                 </ModalHeader>
                 <ModalBody>
                     <Autocomplete
                         value={
-                            tokenKey === SelectTokenModalKey.TokenA
-                                ? formik.values.token0Typed
-                                : formik.values.token1Typed
+                            tokenKey === SelectTokenModalKey.TokenX
+                                ? formik.values.tokenXTyped
+                                : formik.values.tokenYTyped
                         }
                         onValueChange={(value) => {
-                            if (tokenKey === SelectTokenModalKey.TokenA) {
-                                formik.setFieldValue("token0Typed", value)
+                            if (tokenKey === SelectTokenModalKey.TokenX) {
+                                formik.setFieldValue("tokenXTyped", value)
                             } else {
-                                formik.setFieldValue("token1Typed", value)
+                                formik.setFieldValue("tokenYTyped", value)
                             }
                         }}
                         onInputChange={list.setFilterText}
@@ -143,13 +143,13 @@ export const SelectTokenSwapModal = () => {
                         fullWidth
                         onPress={() => {
                             formik.setFieldValue(
-                                tokenKey === SelectTokenModalKey.TokenA ? "token0" : "token1",
-                                tokenKey === SelectTokenModalKey.TokenA
-                                    ? formik.values.token0Typed
-                                    : formik.values.token1Typed
+                                tokenKey === SelectTokenModalKey.TokenX ? "tokenX" : "tokenY",
+                                tokenKey === SelectTokenModalKey.TokenX
+                                    ? formik.values.tokenXTyped
+                                    : formik.values.tokenYTyped
                             )
                             formik.setFieldValue(
-                                tokenKey === SelectTokenModalKey.TokenA ? "token0Metadata" : "token1Metadata",
+                                tokenKey === SelectTokenModalKey.TokenX ? "tokenXMetadata" : "tokenYMetadata",
                                 list.items[0] || null
                             )
                             onClose()

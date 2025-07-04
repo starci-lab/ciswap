@@ -5,24 +5,26 @@ import * as Yup from "yup" // Import Yup
 import { APTOS_MOVE_CALL_SWR_MUTATION } from "../keys"
 import { useSingletonHook } from "../core"
 import { useAptosMoveCallSwrMutation } from "../swrs"
-import { APTOS_SWAP_RESOURCE_ACCOUNT } from "@/config"
+import { buildAptosSwapFQN } from "@/config"
 import { computeRaw } from "@/utils"
 import { useWallet } from "@aptos-labs/wallet-adapter-react"
 import { addErrorToast, addTxToast } from "@/toasts"
 import { useAppSelector } from "@/redux"
+import { chainKeyToPlatformKey, PlatformKey } from "@/types"
 
 export interface SwapFormikValues {
-    token0: string
-    token0Typed: string
-    token1: string
-    token1Typed: string
-    token0Metadata?: TokenMetadata
-    token1Metadata?: TokenMetadata
+    tokenX: string
+    tokenXTyped: string
+    tokenY: string
+    tokenYTyped: string
+    tokenXMetadata?: TokenMetadata
+    tokenYMetadata?: TokenMetadata
     expectedAmountOut: number
     expectedAmountVirtualOut: number
     zeroForOne: boolean
     amountOutLoaded: boolean
     amountInString: string
+    balanceIn: number
 }
 
 export const useSwapFormik = (): FormikProps<SwapFormikValues> => {
@@ -30,49 +32,61 @@ export const useSwapFormik = (): FormikProps<SwapFormikValues> => {
     ReturnType<typeof useAptosMoveCallSwrMutation>
   >(APTOS_MOVE_CALL_SWR_MUTATION)
     const initialValues: SwapFormikValues = {
-        token0: "",
-        token0Typed: "",
-        token1: "",
-        token1Typed: "",
+        tokenX: "",
+        tokenXTyped: "",
+        tokenY: "",
+        tokenYTyped: "",
         amountInString: "",
         expectedAmountOut: 0,
         expectedAmountVirtualOut: 0,
         zeroForOne: true,
         amountOutLoaded: false,
+        balanceIn: 0,
     }
     // Yup validation schema
     const validationSchema = Yup.object({
-        token0: Yup.string().required("Token 0 is required"),
-        token1: Yup.string().required("Token 1 is required"),
+        tokenX: Yup.string().required("Token X is required"),
+        tokenY: Yup.string().required("Token Y is required"),
         amountInString: Yup.string().required("Amount in is required"),
     })
 
     const { account } = useWallet()
     const network = useAppSelector(state => state.chainReducer.network)
+    const chainKey = useAppSelector((state) => state.chainReducer.chainKey)
     const formik = useFormik({
         initialValues,
         validationSchema, // Pass Yup validation schema directly
         onSubmit: async ({ amountInString, zeroForOne }) => {
             try {
             // onpen the sign transaction moda
-                const data = await swrMutation.trigger({
-                    function: `${APTOS_SWAP_RESOURCE_ACCOUNT}::router::swap`,
-                    functionArguments: [
-                        0, // use pool 0, tech debt, will change later if smart router is implemented
-                        computeRaw(Number.parseFloat(amountInString ?? "0")), 
-                        zeroForOne,
-                        account?.address,
-                        0,
-                        0
-                    ],
-                    typeArguments: [],
-                })
-                addTxToast({
-                    txHash: data.hash,
-                    network
-                })
-            }
-            catch (error) {
+                switch (chainKeyToPlatformKey[chainKey]) {
+                case PlatformKey.Aptos: {
+                    const data = await swrMutation.trigger({
+                        function: buildAptosSwapFQN({
+                            network,
+                            moduleName: "router",
+                            functionNameOrResourceType: "swap",
+                        }),
+                        functionArguments: [
+                            0, // use pool 0, tech debt, will change later if smart router is implemented
+                            computeRaw(Number.parseFloat(amountInString ?? "0")), 
+                            zeroForOne,
+                            account?.address,
+                            0,
+                            0
+                        ],
+                        typeArguments: [],
+                    })
+                    addTxToast({
+                        txHash: data.hash,
+                        network
+                    })
+                    break
+                }
+                default:
+                    throw new Error("Unsupported chain")
+                }
+            } catch (error) {
                 addErrorToast(error as Error)
             }
         },
