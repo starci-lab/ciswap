@@ -125,7 +125,13 @@ export const Swap = () => {
                         </div>
                     </div>
                 </div>
-                <Button className="w-10 h-10" isIconOnly variant="flat" radius="full">
+                <Button className="w-10 h-10" isIconOnly variant="flat" radius="full" onPress={() => {
+                    formik.setFieldValue("tokenX", formik.values.tokenY)
+                    formik.setFieldValue("tokenY", formik.values.tokenX)
+                    formik.setFieldValue("tokenXMetadata", formik.values.tokenYMetadata)
+                    formik.setFieldValue("tokenYMetadata", formik.values.tokenXMetadata)
+                    formik.setFieldValue("zeroForOne", !formik.values.zeroForOne)
+                }}>
                     <ArrowDownIcon className="w-5 h-5" />
                 </Button>
                 <Input
