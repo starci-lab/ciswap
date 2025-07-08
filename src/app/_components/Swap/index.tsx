@@ -163,9 +163,9 @@ export const Swap = () => {
                     endContent={
                         formik.values.amountOutLoaded && (
                             <div className="flex gap-2 items-center">
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-2 items-end">
                                     <div className="flex items-center gap-2">
-                                        <div className="text-sm w-20">
+                                        <div className="text-sm">
                                             {formik.values.expectedAmountOut.toString()}
                                         </div>
                                         <div className="text-sm text-gray-500">
@@ -173,7 +173,7 @@ export const Swap = () => {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <div className="text-sm w-20">
+                                        <div className="text-sm">
                                             {formik.values.expectedAmountDebtOut.toString()}
                                         </div>
                                         <div className="text-sm text-gray-500">
