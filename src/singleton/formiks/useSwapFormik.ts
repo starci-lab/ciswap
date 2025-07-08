@@ -20,7 +20,7 @@ export interface SwapFormikValues {
     tokenXMetadata?: TokenMetadata
     tokenYMetadata?: TokenMetadata
     expectedAmountOut: number
-    expectedAmountVirtualOut: number
+    expectedAmountDebtOut: number
     zeroForOne: boolean
     amountOutLoaded: boolean
     amountInString: string
@@ -38,7 +38,7 @@ export const useSwapFormik = (): FormikProps<SwapFormikValues> => {
         tokenYTyped: "",
         amountInString: "",
         expectedAmountOut: 0,
-        expectedAmountVirtualOut: 0,
+        expectedAmountDebtOut: 0,
         zeroForOne: true,
         amountOutLoaded: false,
         balanceIn: 0,
