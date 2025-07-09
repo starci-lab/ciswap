@@ -16,6 +16,7 @@ import {
     GET_POSITIONS_SWR,
     GET_TOKEN_METADATAS_SWR,
     COLLECT_FEES_SWR_MUTATION,
+    MOBILE_MENU_MODAL,
 } from "../../keys"
 import {
     useGetTokenMetadataSwrMutation,
@@ -42,6 +43,7 @@ export const SingletonHookProvider = ({ children }: PropsWithChildren) => (
             [SELECT_TOKEN_MODAL]: useDisclosure(),
             [SELECT_TOKEN_ADD_LIQUIDITY_MODAL]: useDisclosure(),
             [SELECT_TOKEN_SWAP_MODAL]: useDisclosure(),
+            [MOBILE_MENU_MODAL]: useDisclosure(),
             //swrs
             [GET_TOKEN_METADATA_SWR_MUTATION]: useGetTokenMetadataSwrMutation(),
             [APTOS_MOVE_CALL_SWR_MUTATION]: useAptosMoveCallSwrMutation(),

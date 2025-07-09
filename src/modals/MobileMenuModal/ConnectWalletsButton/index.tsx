@@ -7,7 +7,7 @@ export const ConnectWalletsButton = () => {
         CONNECT_WALLETS_DISCLOSURE
     )
     return (
-        <Button variant="flat" color="primary" onPress={onOpen}>
+        <Button color="primary" onPress={onOpen}>
       Connect Wallets
         </Button>
     )

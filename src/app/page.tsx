@@ -21,7 +21,7 @@ const Page = () => {
     }
     
     return (
-        <div>
+        <div className="p-4">
             <div className="w-full grid place-items-center">
                 <Tabs
                     className="max-w-[500px] mx-auto"

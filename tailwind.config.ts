@@ -12,11 +12,23 @@ const config: Config = {
         extend: {
             colors: {
                 background: "var(--background)",
-                foreground: "var(--foreground)",
             },
         },
     },
     darkMode: "class",
-    plugins: [heroui()],
+    plugins: [heroui({
+        themes: {
+            light: {
+                colors: {
+                    primary: "#4DCB8E"
+                }
+            },
+            dark: {
+                colors: {
+                    primary: "#4DCB8E"
+                }
+            }
+        }
+    })],
 }
 export default config

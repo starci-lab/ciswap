@@ -15,7 +15,7 @@ import {
 } from "@/singleton"
 import { NumberInput } from "../../../components/NumberInput"
 import { useSearchParams } from "next/navigation"
-import { isAptosLegacyType } from "@/utils"
+import { isAptosLegacyType, roundNumber } from "@/utils"
 import { useEffects } from "./useEffects"
 
 export const Swap = () => {
@@ -212,11 +212,21 @@ export const Swap = () => {
                         <div className="text-sm">Minimun Received</div>
                     </Tooltip>
                     <div className="flex flex-col items-end">
-                        <div className="text-sm">
-                            {(formik.values.expectedAmountOut * 0.95).toFixed(5)} {formik.values.tokenYMetadata?.symbol}
-                        </div>
-                        <div className="text-sm">
-                            {(formik.values.expectedAmountDebtOut * 0.95).toFixed(5)} {`ci${formik.values.tokenYMetadata?.symbol}`}
+                        <div className="text-sm flex items-center gap-2">
+                            <div>
+                                {roundNumber(formik.values.expectedAmountOut * 0.95)}
+                            </div>
+                            <div className="text-gray-500">
+                                {formik.values.tokenYMetadata?.symbol}
+                            </div>
+                        </div>  
+                        <div className="text-sm flex items-center gap-2">
+                            <div>
+                                {roundNumber(formik.values.expectedAmountDebtOut * 0.95)}
+                            </div>
+                            <div className="text-gray-500">
+                                {`ci${formik.values.tokenYMetadata?.symbol}`}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -255,11 +265,21 @@ export const Swap = () => {
                         <div className="text-sm">Trading Fees</div>
                     </Tooltip>
                     <div className="flex flex-col items-end">
-                        <div className="text-sm">
-                            {(formik.values.expectedAmountOut * 0.03).toFixed(5)} {formik.values.tokenYMetadata?.symbol}
+                        <div className="text-sm flex items-center gap-2">
+                            <div>
+                                {roundNumber(formik.values.expectedAmountOut * 0.03)}
+                            </div>
+                            <div className="text-gray-500">
+                                {formik.values.tokenYMetadata?.symbol}
+                            </div>
                         </div>
-                        <div className="text-sm">
-                            {(formik.values.expectedAmountDebtOut * 0.03).toFixed(5)} {`ci${formik.values.tokenYMetadata?.symbol}`}
+                        <div className="text-sm flex items-center gap-2">
+                            <div>
+                                {roundNumber(formik.values.expectedAmountDebtOut * 0.03)}
+                            </div>
+                            <div className="text-gray-500">
+                                {`ci${formik.values.tokenYMetadata?.symbol}`}
+                            </div>
                         </div>
                     </div>
                 </div>

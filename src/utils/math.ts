@@ -24,3 +24,7 @@ export const computeDenomination = (
         return Number(result) / Number(decimalMultiplier)
     }
 }
+
+export const roundNumber = (number: number, decimals = 5) => {
+    return Number(number.toFixed(decimals))
+}

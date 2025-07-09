@@ -13,6 +13,7 @@ import {
 import { Network as AptosNetwork } from "@aptos-labs/ts-sdk"
 import { Network } from "@/types"
 import { SWRConfig } from "swr"
+import { ThemeProvider as NextThemesProvider } from "next-themes"
 
 export const ContentLayout = ({ children }: PropsWithChildren) => {
     const network = useAppSelector((state) => state.chainReducer.network)
@@ -35,20 +36,22 @@ export const ContentLayout = ({ children }: PropsWithChildren) => {
                 revalidateIfStale: false,
             }}>
                 <HeroUIProvider>
-                    <SingletonHookProvider>
-                        <SingletonHook2Provider>
-                            <IconContext.Provider
-                                value={{
-                                    size: 20,
-                                }}
-                            >
-                                <Navbar />
-                                <Spacer y={6} />
-                                {children}
-                                <ToastProvider />
-                            </IconContext.Provider>
-                        </SingletonHook2Provider>
-                    </SingletonHookProvider>
+                    <NextThemesProvider attribute="class" defaultTheme="dark">
+                        <SingletonHookProvider>
+                            <SingletonHook2Provider>
+                                <IconContext.Provider
+                                    value={{
+                                        size: 20,
+                                    }}
+                                >
+                                    <Navbar />
+                                    <Spacer y={6} />
+                                    {children}
+                                    <ToastProvider />
+                                </IconContext.Provider>
+                            </SingletonHook2Provider>
+                        </SingletonHookProvider>
+                    </NextThemesProvider>
                 </HeroUIProvider>
             </SWRConfig>
         </AptosWalletAdapterProvider>

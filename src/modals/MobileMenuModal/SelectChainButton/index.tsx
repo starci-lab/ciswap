@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Image, useDisclosure } from "@heroui/react"
+import { Button, useDisclosure, Image } from "@heroui/react"
 import { useAppSelector } from "@/redux"
 import { chains } from "@/constants"
 import { SELECT_CHAIN_MODAL, useSingletonHook } from "@/singleton"
