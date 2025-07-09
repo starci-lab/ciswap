@@ -33,6 +33,7 @@ import { useCollectFeesSwrMutation, useSingletonHook } from "@/singleton"
 import { COLLECT_FEES_SWR_MUTATION } from "@/singleton/keys"
 import { useActiveAddress } from "@/hooks"
 import { APTOS_COIN_ADDRESS } from "@/constants"
+import { addTxToast } from "@/toasts"
 
 const Page = () => {
     const params = useParams()
@@ -53,6 +54,7 @@ const Page = () => {
     ReturnType<typeof useCollectFeesSwrMutation>
   >(COLLECT_FEES_SWR_MUTATION)
     const accountAddress = useActiveAddress()
+    const network = useAppSelector((state) => state.chainReducer.network)
     if (!position) return
     return (
         <div className="max-w-[500px] mx-auto">
@@ -204,11 +206,18 @@ const Page = () => {
                         <Title text="Pending yield" />
                         <Button
                             color="primary"
-                            onPress={() =>
-                                collectFeesSwrMutation.trigger({
-                                    nftAddress: nftAddress as string,
-                                    recipientAddress: accountAddress || "",
-                                })
+                            onPress={
+                                async () =>
+                                {
+                                    const { hash } = await collectFeesSwrMutation.trigger({
+                                        nftAddress: nftAddress as string,
+                                        recipientAddress: accountAddress || "",
+                                    })
+                                    addTxToast({
+                                        txHash: hash,
+                                        network
+                                    })
+                                }
                             }
                         >
               Claim

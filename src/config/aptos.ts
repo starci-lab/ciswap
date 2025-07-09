@@ -1,9 +1,9 @@
 import { Network } from "@/types"
 
 export const APTOS_SWAP_RESOURCE_TESTNET_ACCOUNT =
-  "0x6b47a820e52fde2df5a33d454614b5f94702a6c75b0b01e4a94394e01c41b72e"
+  "0x0328cfaf0b3ca022c27aec4c0de43faf3b93226a7327d81c78dfb8b8808cd041"
 export const APTOS_SWAP_RESOURCE_MAINNET_ACCOUNT =
-  "0x6b47a820e52fde2df5a33d454614b5f94702a6c75b0b01e4a94394e01c41b72e"
+  "0x0328cfaf0b3ca022c27aec4c0de43faf3b93226a7327d81c78dfb8b8808cd041"
 
 export const aptosSwapResourceAccounts = {
     [Network.Mainnet]: APTOS_SWAP_RESOURCE_MAINNET_ACCOUNT,
