@@ -11,9 +11,9 @@ export const ThemeSwitch = () => {
                 color="default"
                 thumbIcon={({ isSelected, className }) =>
                     isSelected ? (
-                        <SunIcon weight="fill" className={className} />
-                    ) : (
                         <MoonIcon weight="fill" className={className} />
+                    ) : (
+                        <SunIcon weight="fill" className={className} />
                     )
                 }
                 isSelected={theme === "dark"}
