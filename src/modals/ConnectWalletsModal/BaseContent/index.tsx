@@ -1,6 +1,13 @@
 import { setSelectedPlatform, useAppDispatch } from "@/redux"
 import { PlatformKey } from "@/types"
-import { CardBody, Card, ModalBody, ModalHeader, Image, Snippet } from "@heroui/react"
+import {
+    CardBody,
+    Card,
+    ModalBody,
+    ModalHeader,
+    Image,
+    Snippet,
+} from "@heroui/react"
 import React from "react"
 import { useWallet } from "@aptos-labs/wallet-adapter-react"
 import { truncateString } from "@/utils"
@@ -51,41 +58,48 @@ export const BaseContent = () => {
         <>
             <ModalHeader>Connect Wallets</ModalHeader>
             <ModalBody>
-                {platforms.map((platform) => (
-                    <Card
-                        key={platform.key}
-                        isPressable={platform.status === Status.Ready}
-                        onPress={() => dispatch(setSelectedPlatform(platform.key))}
-                    >
-                        <CardBody className="w-full">
-                            <div className="flex justify-between items-center w-full">
-                                <div className="flex items-center gap-2">
-                                    <Image
-                                        src={platform.image}
-                                        alt={platform.name}
-                                        className="w-10 h-10"
-                                    />
-                                    <div>
-                                        <div className="text-sm">{platform.name}</div>
-                                        {renderAddress(platform.key)}
-                                        {platform.status === Status.ComingSoon && (
-                                            <div className="text-xs text-foreground-500">
-                      Coming Soon
-                                            </div>
-                                        )}
+                {platforms.map((platform) => {
+                    if (platform.status === Status.ComingSoon) {
+                        return null
+                    }
+                    return (
+                        <Card
+                            key={platform.key}
+                            isPressable={platform.status === Status.Ready}
+                            onPress={() => dispatch(setSelectedPlatform(platform.key))}
+                        >
+                            <CardBody className="w-full">
+                                <div className="flex justify-between items-center w-full">
+                                    <div className="flex items-center gap-2">
+                                        <Image
+                                            src={platform.image}
+                                            alt={platform.name}
+                                            className="w-10 h-10"
+                                        />
+                                        <div>
+                                            <div className="text-sm">{platform.name}</div>
+                                            {renderAddress(platform.key)}
+                                            {/* {platform.status === Status.ComingSoon && (
+                        <div className="text-xs text-foreground-500">
+                          Coming Soon
+                        </div>
+                      )} */}
+                                        </div>
                                     </div>
+                                    {getAddress(platform.key) && (
+                                        <Snippet
+                                            hideSymbol
+                                            classNames={{
+                                                base: "bg-transparent p-0 gap-0",
+                                            }}
+                                            codeString={getAddress(platform.key)}
+                                        />
+                                    )}
                                 </div>
-                                {
-                                    getAddress(platform.key) && (
-                                        <Snippet hideSymbol classNames={{
-                                            base: "bg-transparent p-0 gap-0"
-                                        }} codeString={getAddress(platform.key)}/>
-                                    )
-                                }
-                            </div>
-                        </CardBody>
-                    </Card>
-                ))}
+                            </CardBody>
+                        </Card>
+                    )
+                })}
             </ModalBody>
         </>
     )
