@@ -8,7 +8,7 @@ import {
     Button,
     useDisclosure,
 } from "@heroui/react"
-import { ConnectWalletsButton, SelectChainButton } from "@/modals"
+import { ConnectWalletsButton, SelectChainButton, ThemeSwitch } from "@/modals"
 import { ListIcon } from "@phosphor-icons/react"
 import { useSingletonHook, MOBILE_MENU_MODAL } from "@/singleton"
 import { useIsMobile } from "@/hooks"
@@ -48,6 +48,9 @@ export const Navbar = () => {
                     </NavbarItem>
                 ) : (
                     <>
+                        <NavbarItem>
+                            <ThemeSwitch />
+                        </NavbarItem>
                         <NavbarItem>
                             <SelectChainButton />
                         </NavbarItem>
