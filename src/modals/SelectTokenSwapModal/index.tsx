@@ -26,6 +26,7 @@ import { SelectTokenModalKey } from "@/redux"
 import { useAsyncList } from "@react-stately/data"
 import { TokenMetadata } from "@/modules/blockchain"
 import { TokenImage } from "@/components"
+import { APTOS_COIN_ADDRESS } from "@/constants"
 
 export const SelectTokenSwapModal = () => {
     const selectedChainKey = useAppSelector(
@@ -122,6 +123,7 @@ export const SelectTokenSwapModal = () => {
                                     key={item.name}
                                     startContent={
                                         <TokenImage
+                                            isAptos={item.tokenAddress === APTOS_COIN_ADDRESS}
                                             src={item.imageUrl}
                                             alt={item.name}
                                             className="w-10 h-10 rounded-full"

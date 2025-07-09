@@ -26,6 +26,7 @@ import { useAsyncList } from "@react-stately/data"
 import { TokenMetadata } from "@/modules/blockchain"
 import { TokenImage } from "@/components"
 import { isAptosLegacyType } from "@/utils"
+import { APTOS_COIN_ADDRESS } from "@/constants"
 
 export const SelectTokenModal = () => {
     const selectedChainKey = useAppSelector(
@@ -142,6 +143,7 @@ export const SelectTokenModal = () => {
                                     key={item.name}
                                     startContent={
                                         <TokenImage
+                                            isAptos={item.tokenAddress === APTOS_COIN_ADDRESS}
                                             src={item.imageUrl}
                                             alt={item.name}
                                             className="w-10 h-10 rounded-full"

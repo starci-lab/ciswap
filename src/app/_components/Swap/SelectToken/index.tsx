@@ -9,6 +9,7 @@ import {
 } from "@/singleton"
 import { useSwapFormik, SWAP_FORMIK } from "@/singleton"
 import { setSelectedTokenSwap } from "@/redux"
+import { APTOS_COIN_ADDRESS } from "@/constants"
 
 export interface SelectTokenProps {
   tokenKey: SelectTokenModalKey;
@@ -36,7 +37,7 @@ export const SelectToken = ({ tokenKey }: SelectTokenProps) => {
             }}
             className="text-start pl-0.5 pr-4 rounded-full"
         >
-            <TokenImage src={metadata?.imageUrl} className="min-w-8 min-h-8 w-8 h-8" />
+            <TokenImage isAptos={metadata?.tokenAddress === APTOS_COIN_ADDRESS} src={metadata?.imageUrl} className="min-w-8 min-h-8 w-8 h-8" />
             <div className="flex flex-col">
                 <div className="text-sm font-bold">{metadata?.symbol}</div>
                 <div className="text-xs text-foreground-500">{metadata?.name}</div>

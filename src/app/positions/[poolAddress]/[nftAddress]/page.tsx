@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation"
 import { useCollectFeesSwrMutation, useSingletonHook } from "@/singleton"
 import { COLLECT_FEES_SWR_MUTATION } from "@/singleton/keys"
 import { useActiveAddress } from "@/hooks"
+import { APTOS_COIN_ADDRESS } from "@/constants"
 
 const Page = () => {
     const params = useParams()
@@ -86,7 +87,8 @@ const Page = () => {
                     <div className="flex-1">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1">
-                                <TokenImage
+                                <TokenImage 
+                                    isAptos={tokenMetadatas?.tokenXMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
                                     className="w-5 h-5"
                                     src={tokenMetadatas?.tokenXMetadata?.imageUrl}
                                     alt={tokenMetadatas?.tokenXMetadata?.name}
@@ -115,6 +117,7 @@ const Page = () => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1">
                                 <TokenImage
+                                    isAptos={tokenMetadatas?.tokenYMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
                                     className="w-5 h-5"
                                     src={tokenMetadatas?.tokenYMetadata?.imageUrl}
                                     alt={tokenMetadatas?.tokenYMetadata?.name}
@@ -216,6 +219,7 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
+                                isAptos={tokenMetadatas?.tokenXMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
                                 src={tokenMetadatas?.tokenXMetadata?.imageUrl}
                                 className="w-4 h-4"
                             />
@@ -241,6 +245,7 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
+                                isAptos={tokenMetadatas?.tokenYMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
                                 src={tokenMetadatas?.tokenYMetadata?.imageUrl}
                                 className="w-4 h-4"
                             />
@@ -266,6 +271,7 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
+                                isAptos={tokenMetadatas?.tokenDebtXMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
                                 src={tokenMetadatas?.tokenDebtXMetadata?.imageUrl}
                                 className="w-4 h-4"
                             />
@@ -291,6 +297,7 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
+                                isAptos={tokenMetadatas?.tokenDebtYMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
                                 src={tokenMetadatas?.tokenDebtYMetadata?.imageUrl}
                                 className="w-4 h-4"
                             />

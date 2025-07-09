@@ -8,6 +8,7 @@ import {
 } from "@/singleton"
 import React from "react"
 import { useAppSelector } from "@/redux"
+import { APTOS_COIN_ADDRESS } from "@/constants"
 
 export const Deposit = () => {
     const formik =
@@ -22,6 +23,7 @@ export const Deposit = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
                             <TokenImage
+                                isAptos={tokenMetadatas?.tokenXMetadata.tokenAddress === APTOS_COIN_ADDRESS}
                                 className="w-5 h-5"
                                 src={tokenMetadatas?.tokenXMetadata.imageUrl}
                                 alt={tokenMetadatas?.tokenXMetadata.name}
@@ -60,6 +62,7 @@ export const Deposit = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
                             <TokenImage
+                                isAptos={tokenMetadatas?.tokenYMetadata.tokenAddress === APTOS_COIN_ADDRESS}
                                 className="w-5 h-5"
                                 src={tokenMetadatas?.tokenYMetadata.imageUrl}
                                 alt={tokenMetadatas?.tokenYMetadata.name}

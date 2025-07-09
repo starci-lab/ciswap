@@ -13,12 +13,14 @@ import { useSingletonHook, SELECT_CHAIN_MODAL } from "@/singleton"
 import { useAppSelector, setChainKey } from "@/redux"
 import { useAppDispatch } from "@/redux"
 import { chains } from "@/constants"
+import { useTheme } from "next-themes"
 
 export const SelectChainModal = () => {
     const { isOpen, onOpenChange } =
     useSingletonHook<ReturnType<typeof useDisclosure>>(SELECT_CHAIN_MODAL)
     const { chainKey } = useAppSelector((state) => state.chainReducer)
     const dispatch = useAppDispatch()
+    const { theme } = useTheme()
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
@@ -36,7 +38,11 @@ export const SelectChainModal = () => {
                                 <CardBody>
                                     <div className="flex items-center gap-2">
                                         <Image
-                                            src={chain.imageUrl}
+                                            src={
+                                                theme === "dark"
+                                                    ? chain.imageUrl.dark
+                                                    : chain.imageUrl.light
+                                            }
                                             alt={chain.name}
                                             className="w-10 h-10"
                                         />

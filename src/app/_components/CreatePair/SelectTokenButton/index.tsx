@@ -10,6 +10,7 @@ import {
 } from "@/singleton"
 import { Button, useDisclosure } from "@heroui/react"
 import React from "react"
+import { APTOS_COIN_ADDRESS } from "@/constants"
 
 export interface SelectTokenButtonProps {
   tokenKey: SelectTokenModalKey;
@@ -49,6 +50,7 @@ export const SelectTokenButton = ({ tokenKey }: SelectTokenButtonProps) => {
             }}
             startContent={
                 <TokenImage
+                    isAptos={metadata?.tokenAddress === APTOS_COIN_ADDRESS}
                     src={metadata?.imageUrl}
                     alt={metadata?.name}
                     className="w-5 h-5 rounded-full"
