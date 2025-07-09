@@ -7,6 +7,7 @@ import {
     Link,
     Button,
     useDisclosure,
+    Chip,
 } from "@heroui/react"
 import { ConnectWalletsButton, SelectChainButton, ThemeSwitch } from "@/modals"
 import { ListIcon } from "@phosphor-icons/react"
@@ -20,7 +21,12 @@ export const Navbar = () => {
     return (
         <HeroNavbar>
             <NavbarBrand>
-                <p className="font-bold text-inherit">CiSwap</p>
+                <div className="flex gap-2 items-center">
+                    <div className="font-bold text-inherit">CiSwap</div>
+                    <Chip variant="flat" color="warning">
+                        Testnet
+                    </Chip>
+                </div>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
