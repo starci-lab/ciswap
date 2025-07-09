@@ -241,7 +241,7 @@ export const Swap = () => {
                             </div>
                         }
                     >
-                        <div className="text-sm">Slippage tolerance</div>
+                        <div className="text-sm">Slippage Tolerance</div>
                     </Tooltip>
                     <Button
                         endContent={<PencilIcon />}
