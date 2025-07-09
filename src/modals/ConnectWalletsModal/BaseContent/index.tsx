@@ -6,11 +6,12 @@ import {
     ModalBody,
     ModalHeader,
     Image,
-    Snippet,
+    Snippet
 } from "@heroui/react"
 import React from "react"
 import { useWallet } from "@aptos-labs/wallet-adapter-react"
 import { truncateString } from "@/utils"
+import { useTheme } from "next-themes"
 
 export enum Status {
   Ready = "ready",
@@ -20,19 +21,28 @@ export const platforms = [
     {
         key: PlatformKey.Aptos,
         name: "Aptos",
-        image: "/aptos.svg",
+        image: {
+            dark: "/aptos-dark.svg",
+            light: "/aptos-light.svg",
+        },
         status: Status.Ready,
     },
     {
         key: PlatformKey.Solana,
         name: "Solana",
-        image: "/solana.svg",
+        image: {
+            dark: "/solana.svg",
+            light: "/solana.svg",
+        },
         status: Status.ComingSoon,
     },
     {
         key: PlatformKey.Sui,
         name: "Sui",
-        image: "/sui.svg",
+        image: {
+            dark: "/sui.svg",
+            light: "/sui.svg",
+        },
         status: Status.ComingSoon,
     },
 ]
@@ -53,7 +63,7 @@ export const BaseContent = () => {
             </div>
         )
     }
-
+    const { theme } = useTheme()
     return (
         <>
             <ModalHeader>Connect Wallets</ModalHeader>
@@ -72,9 +82,9 @@ export const BaseContent = () => {
                                 <div className="flex justify-between items-center w-full">
                                     <div className="flex items-center gap-2">
                                         <Image
-                                            src={platform.image}
+                                            src={platform.image[theme === "dark" ? "dark" : "light"]}
                                             alt={platform.name}
-                                            className="w-10 h-10"
+                                            className="w-10 h-10 min-w-10 min-h-10"
                                         />
                                         <div>
                                             <div className="text-sm">{platform.name}</div>
