@@ -47,6 +47,7 @@ export const ContentLayout = ({ children }: PropsWithChildren) => {
                                     <Navbar />
                                     <Spacer y={6} />
                                     {children}
+                                    <Spacer y={6} />
                                     <ToastProvider />
                                 </IconContext.Provider>
                             </SingletonHook2Provider>

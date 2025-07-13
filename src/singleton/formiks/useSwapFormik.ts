@@ -5,7 +5,7 @@ import * as Yup from "yup" // Import Yup
 import { APTOS_MOVE_CALL_SWR_MUTATION } from "../keys"
 import { useSingletonHook } from "../core"
 import { useAptosMoveCallSwrMutation } from "../swrs"
-import { buildAptosSwapFQN } from "@/config"
+import { buildAptosFQN } from "@/config"
 import { computeRaw } from "@/utils"
 import { useWallet } from "@aptos-labs/wallet-adapter-react"
 import { addErrorToast, addTxToast } from "@/toasts"
@@ -14,9 +14,7 @@ import { chainKeyToPlatformKey, PlatformKey } from "@/types"
 
 export interface SwapFormikValues {
     tokenX: string
-    tokenXTyped: string
     tokenY: string
-    tokenYTyped: string
     tokenXMetadata?: TokenMetadata
     tokenYMetadata?: TokenMetadata
     expectedAmountOut: number
@@ -33,9 +31,7 @@ export const useSwapFormik = (): FormikProps<SwapFormikValues> => {
   >(APTOS_MOVE_CALL_SWR_MUTATION)
     const initialValues: SwapFormikValues = {
         tokenX: "",
-        tokenXTyped: "",
         tokenY: "",
-        tokenYTyped: "",
         amountInString: "",
         expectedAmountOut: 0,
         expectedAmountDebtOut: 0,
@@ -62,7 +58,7 @@ export const useSwapFormik = (): FormikProps<SwapFormikValues> => {
                 switch (chainKeyToPlatformKey[chainKey]) {
                 case PlatformKey.Aptos: {
                     const data = await swrMutation.trigger({
-                        function: buildAptosSwapFQN({
+                        function: buildAptosFQN({
                             network,
                             moduleName: "router",
                             functionNameOrResourceType: "swap",

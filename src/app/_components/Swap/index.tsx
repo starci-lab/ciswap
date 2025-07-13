@@ -4,18 +4,15 @@ import React, { useEffect } from "react"
 import { SelectToken } from "./SelectToken"
 import { SelectTokenModalKey } from "@/redux"
 import {
-    GET_TOKEN_METADATA_SWR_MUTATION,
     QUOTE_PRICE_OUT_SWR_MUTATION,
     SWAP_FORMIK,
-    useGetTokenMetadataSwrMutation,
     useQuotePriceOutSwrMutation,
     useSingletonHook,
     useSingletonHook2,
     useSwapFormik,
 } from "@/singleton"
 import { NumberInput } from "../../../components/NumberInput"
-import { useSearchParams } from "next/navigation"
-import { isAptosLegacyType, roundNumber } from "@/utils"
+import { roundNumber } from "@/utils"
 import { useEffects } from "./useEffects"
 
 export const Swap = () => {
@@ -26,43 +23,9 @@ export const Swap = () => {
     const formik =
     useSingletonHook2<ReturnType<typeof useSwapFormik>>(SWAP_FORMIK)
 
-    const searchParams = useSearchParams()
-    const tokenX = searchParams.get("tokenX") || "0x1::aptos_coin::AptosCoin"
-    const tokenY =
-    searchParams.get("tokenY") ||
-    "0xffbd7560161ea26468a482555669eec1f28f7fb1d985aa44e0a58413b267ce78"
-    const zeroForOne = Boolean(searchParams.get("zeroForOne") || "true")
-
-    const { swrMutation: getTokenMetadataSwrMutation } = useSingletonHook<
-    ReturnType<typeof useGetTokenMetadataSwrMutation>
-  >(GET_TOKEN_METADATA_SWR_MUTATION)
     useEffect(() => {
-        const handleEffect = async () => {
-            const data = await getTokenMetadataSwrMutation.trigger({
-                tokenAddress: tokenX,
-                isTypeTag: isAptosLegacyType(tokenX),
-            })
-            formik.setFieldValue("tokenXMetadata", data)
-            formik.setFieldValue("tokenX", data.tokenAddress)
-        }
-        handleEffect()
-    }, [tokenX])
-    useEffect(() => {
-        const handleEffect = async () => {
-            const data = await getTokenMetadataSwrMutation.trigger({
-                tokenAddress: tokenY,
-                isTypeTag: isAptosLegacyType(tokenY),
-            })
-            formik.setFieldValue("tokenYMetadata", data)
-            formik.setFieldValue("tokenY", data.tokenAddress)
-        }
-        handleEffect()
-    }, [tokenY])
-    useEffect(() => {
-        formik.setFieldValue("zeroForOne", zeroForOne)
-    }, [zeroForOne])
-
-    useEffects()
+        formik.setFieldValue("zeroForOne", formik.values.zeroForOne)
+    }, [formik.values.zeroForOne])
 
     useEffect(() => {
         if (
@@ -99,6 +62,8 @@ export const Swap = () => {
         formik.values.amountInString,
         formik.values.zeroForOne,
     ])
+
+    useEffects()
 
     return (
         <div>

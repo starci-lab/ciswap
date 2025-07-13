@@ -10,7 +10,8 @@ import {
 } from "@/singleton"
 import { Button, useDisclosure } from "@heroui/react"
 import React from "react"
-import { APTOS_COIN_ADDRESS } from "@/constants"
+import { useTheme } from "next-themes"
+import { getHeroUITheme } from "@/utils"
 
 export interface SelectTokenButtonProps {
   tokenKey: SelectTokenModalKey;
@@ -18,6 +19,8 @@ export interface SelectTokenButtonProps {
 
 export const SelectTokenButton = ({ tokenKey }: SelectTokenButtonProps) => {
     const dispatch = useAppDispatch()
+    const { theme } = useTheme()
+    const _theme = getHeroUITheme(theme)
     const formik =
     useSingletonHook2<ReturnType<typeof useCreatePairFormik>>(
         CREATE_PAIR_FORMIK
@@ -50,9 +53,8 @@ export const SelectTokenButton = ({ tokenKey }: SelectTokenButtonProps) => {
             }}
             startContent={
                 <TokenImage
-                    isAptos={metadata?.tokenAddress === APTOS_COIN_ADDRESS}
-                    src={metadata?.imageUrl}
-                    alt={metadata?.name}
+                    iconUrls={metadata?.iconUris}
+                    theme={_theme}
                     className="w-5 h-5 rounded-full"
                 />
             }

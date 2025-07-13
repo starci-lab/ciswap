@@ -1,6 +1,6 @@
 import { AptosMoveTableHandle, ChainKey, Network } from "@/types"
 import { createAptosClient } from "../rpcs"
-import { aptosSwapResourceAccounts, buildAptosSwapFQN } from "@/config"
+import { aptosSwapResourceAccounts, buildAptosFQN } from "@/config"
 
 export interface GetTokenPairReserveParams {
   chainKey: ChainKey;
@@ -34,7 +34,7 @@ export const getAptosTokenPairReserve = async ({
     const aptosClient = createAptosClient(network)
     const tokenPairReserves = await aptosClient.getAccountResource<AptosMoveTokenPairReserves>({
         accountAddress: aptosSwapResourceAccounts[network ?? Network.Mainnet],
-        resourceType: buildAptosSwapFQN({
+        resourceType: buildAptosFQN({
             network,
             moduleName: "swap",
             functionNameOrResourceType: "TokenPairReserves",
@@ -45,7 +45,7 @@ export const getAptosTokenPairReserve = async ({
         data: {
             key: poolId.toString(),
             key_type: "u64",
-            value_type: buildAptosSwapFQN({
+            value_type: buildAptosFQN({
                 network,
                 moduleName: "swap",
                 functionNameOrResourceType: "TokenPairReserve",

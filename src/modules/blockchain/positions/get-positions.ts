@@ -4,7 +4,7 @@ import { AptosMoveTableHandle, ChainKey, Network } from "@/types/blockchain"
 
 import { gql } from "@apollo/client"
 import { createAptosClient, createAptosIndexerApolloClient } from "../rpcs/aptos"
-import { aptosSwapResourceAccounts, buildAptosSwapFQN } from "@/config"
+import { aptosSwapResourceAccounts, buildAptosFQN } from "@/config"
 
 export interface GetPositionsParams {
   chainKey: ChainKey;
@@ -87,7 +87,7 @@ export const getAptosPositions = async ({
     // get the metadatas for the collection
     const metadatas = await aptosClient.getAccountResource<AptosMoveMetadatas>({
         accountAddress: aptosSwapResourceAccounts[network ?? Network.Mainnet],
-        resourceType: buildAptosSwapFQN({
+        resourceType: buildAptosFQN({
             network,
             moduleName: "position",
             functionNameOrResourceType: "CollectionMetadatas",
@@ -99,7 +99,7 @@ export const getAptosPositions = async ({
         data: {
             key: poolId.toString(),
             key_type: "u64",
-            value_type: buildAptosSwapFQN({
+            value_type: buildAptosFQN({
                 network,
                 moduleName: "position",
                 functionNameOrResourceType: "CollectionMetadata",
@@ -118,7 +118,7 @@ export const getAptosPositions = async ({
                 data: {
                     key: tokenData.token_data_id,
                     key_type: "address",
-                    value_type: buildAptosSwapFQN({
+                    value_type: buildAptosFQN({
                         network,
                         moduleName: "position",
                         functionNameOrResourceType: "Position",

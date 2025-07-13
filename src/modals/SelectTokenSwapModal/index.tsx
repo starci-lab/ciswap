@@ -1,3 +1,4 @@
+"use client"
 import React, { useRef } from "react"
 import {
     Modal,
@@ -5,11 +6,8 @@ import {
     ModalContent,
     useDisclosure,
     ModalBody,
-    ModalFooter,
-    Button,
-    Autocomplete,
-    AutocompleteItem,
-    Alert,
+    Input,
+    Spacer,
 } from "@heroui/react"
 import {
     useSingletonHook,
@@ -20,60 +18,72 @@ import {
     SWAP_FORMIK,
     SELECT_TOKEN_SWAP_MODAL,
 } from "@/singleton"
-import { PlatformKey, chainKeyToPlatformKey } from "@/types"
 import { useAppSelector } from "@/redux"
 import { SelectTokenModalKey } from "@/redux"
 import { useAsyncList } from "@react-stately/data"
 import { TokenMetadata } from "@/modules/blockchain"
-import { TokenImage } from "@/components"
-import { APTOS_COIN_ADDRESS } from "@/constants"
+import { TokenSelect } from "@/components"
+import { tokenMap } from "@/config"
+import { useTheme } from "next-themes"
+import { getHeroUITheme } from "@/utils"
 
 export const SelectTokenSwapModal = () => {
-    const selectedChainKey = useAppSelector(
-        (state) => state.chainReducer.chainKey
-    )
     const tokenKey = useAppSelector(
         (state) => state.modalReducer.selectTokenSwapModal.selectedToken
     )
-    const { isOpen, onOpenChange, onClose } =
-    useSingletonHook<ReturnType<typeof useDisclosure>>(SELECT_TOKEN_SWAP_MODAL)
-
-    const warningText = {
-        [PlatformKey.Aptos]:
-      "For Aptos, token address is like 0x1::aptos_coin::AptosCoin",
-        [PlatformKey.Solana]:
-      "For Solana, token address is a base58 string like Hs1...2oFZ",
-        [PlatformKey.Sui]: "For Sui, token address is like 0x2::sui::SUI",
-        [PlatformKey.Evm]:
-      "For Evm, token address is like 0x1234567890123456789012345678901234567890",
-    }
+    const { isOpen, onOpenChange, onClose } = useSingletonHook<
+    ReturnType<typeof useDisclosure>
+  >(SELECT_TOKEN_SWAP_MODAL)
 
     const formik =
-    useSingletonHook2<ReturnType<typeof useSwapFormik>>(
-        SWAP_FORMIK
-    )
+    useSingletonHook2<ReturnType<typeof useSwapFormik>>(SWAP_FORMIK)
+    const network = useAppSelector((state) => state.chainReducer.network)
 
     const { swrMutation } = useSingletonHook<
     ReturnType<typeof useGetTokenMetadataSwrMutation>
   >(GET_TOKEN_METADATA_SWR_MUTATION)
-
-    const platformKey = chainKeyToPlatformKey[selectedChainKey]
+    const chainKey = useAppSelector((state) => state.chainReducer.chainKey)
+    const { theme } = useTheme()
+    const _theme = getHeroUITheme(theme)
 
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
     const list = useAsyncList<TokenMetadata>({
         async load({ signal, filterText }) {
-            if (!filterText) return {
-                items: [],
-            }
-            // Clear timeout cũ nếu có
+            if (!filterText) filterText = ""
+            // Clear old timeout if exists
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current)
             }
-            // Trả về một Promise để chờ debounce
+            // Return a Promise to wait for debounce
             return await new Promise((resolve) => {
                 timeoutRef.current = setTimeout(async () => {
                     try {
+                        const items = tokenMap[chainKey][network]
+                        const filteredResults = items
+                            .filter((token) => {
+                                return (
+                                    token.name.toLowerCase().includes(filterText.toLowerCase()) ||
+                  token.symbol
+                      .toLowerCase()
+                      .includes(filterText.toLowerCase()) ||
+                  (filterText.length > 5 &&
+                    token.address
+                        .toLowerCase()
+                        .includes(filterText.toLowerCase()))
+                                )
+                            })
+                            // .filter(
+                            //     (token) =>
+                            //         token.address !== formik.values.tokenX &&
+                            //         token.address !== formik.values.tokenY
+                            // )
+                            
+                        if (filteredResults.length > 0) {
+                            resolve({
+                                items: filteredResults
+                            })
+                            return
+                        }
                         const data = await swrMutation.trigger({
                             tokenAddress: filterText || "",
                             signal,
@@ -87,79 +97,55 @@ export const SelectTokenSwapModal = () => {
                             items: [],
                         })
                     }
-                }, 1000) // debounce 1 giây
+                }, 500) // debounce 1 second
             })
         },
     })
-
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
-                <ModalHeader>
-          Select Token {tokenKey === SelectTokenModalKey.TokenX ? "X" : "Y"}
-                </ModalHeader>
+                <ModalHeader>Select Token</ModalHeader>
                 <ModalBody>
-                    <Autocomplete
-                        value={
-                            tokenKey === SelectTokenModalKey.TokenX
-                                ? formik.values.tokenXTyped
-                                : formik.values.tokenYTyped
-                        }
-                        onValueChange={(value) => {
-                            if (tokenKey === SelectTokenModalKey.TokenX) {
-                                formik.setFieldValue("tokenXTyped", value)
-                            } else {
-                                formik.setFieldValue("tokenYTyped", value)
-                            }
-                        }}
-                        onInputChange={list.setFilterText}
-                        labelPlacement="outside"
-                        items={list.items}
-                        placeholder="Search a token"
-                    >
-                        {list.items.map((item) => {
-                            return (
-                                <AutocompleteItem
-                                    key={item.name}
-                                    startContent={
-                                        <TokenImage
-                                            isAptos={item.tokenAddress === APTOS_COIN_ADDRESS}
-                                            src={item.imageUrl}
-                                            alt={item.name}
-                                            className="w-10 h-10 rounded-full"
+                    <div>
+                        <Input
+                            value={list.filterText}
+                            onValueChange={(value) => {
+                                list.setFilterText(value)
+                            }}
+                            labelPlacement="outside"
+                            placeholder="Search name / address"
+                        />
+                        <Spacer y={4} />
+                        <div>
+                            <div className="flex flex-col gap-2">
+                                {list.items.map((item) => {
+                                    return (
+                                        <TokenSelect
+                                            key={item.address}
+                                            metadata={item}
+                                            theme={_theme}
+                                            onPress={() => {
+                                                formik.setFieldValue(
+                                                    tokenKey === SelectTokenModalKey.TokenX
+                                                        ? "tokenX"
+                                                        : "tokenY",
+                                                    item.address
+                                                )
+                                                formik.setFieldValue(
+                                                    tokenKey === SelectTokenModalKey.TokenX
+                                                        ? "tokenXMetadata"
+                                                        : "tokenYMetadata",
+                                                    item
+                                                )
+                                                onClose()
+                                            }}
                                         />
-                                    }
-                                >
-                                    {item.name}
-                                </AutocompleteItem>
-                            )
-                        })}
-                    </Autocomplete>
-                    <Alert color="secondary" variant="flat">
-                        {warningText[platformKey]}
-                    </Alert>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    </div>
                 </ModalBody>
-                <ModalFooter>
-                    <Button
-                        color="primary"
-                        fullWidth
-                        onPress={() => {
-                            formik.setFieldValue(
-                                tokenKey === SelectTokenModalKey.TokenX ? "tokenX" : "tokenY",
-                                tokenKey === SelectTokenModalKey.TokenX
-                                    ? formik.values.tokenXTyped
-                                    : formik.values.tokenYTyped
-                            )
-                            formik.setFieldValue(
-                                tokenKey === SelectTokenModalKey.TokenX ? "tokenXMetadata" : "tokenYMetadata",
-                                list.items[0] || null
-                            )
-                            onClose()
-                        }}
-                    >
-            Add
-                    </Button>
-                </ModalFooter>
             </ModalContent>
         </Modal>
     )

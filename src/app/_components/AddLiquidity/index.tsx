@@ -40,7 +40,7 @@ export const AddLiquidity = () => {
             <Spacer y={1.5} />
             <Input
                 errorMessage={poolId?.toString()}
-                isInvalid={!!poolId}
+                isInvalid={poolId === undefined}
                 label=""
                 min={0}
                 description={`Pool ID available range: 0 - ${

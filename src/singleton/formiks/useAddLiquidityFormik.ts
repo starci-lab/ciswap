@@ -6,7 +6,7 @@ import { useAptosMoveCallSwrMutation } from "../swrs"
 import { computeRaw } from "@/utils"
 import { addErrorToast, addTxToast } from "@/toasts"
 import { useAppSelector } from "@/redux"
-import { buildAptosSwapFQN } from "@/config"
+import { buildAptosFQN } from "@/config"
 import { chainKeyToPlatformKey, PlatformKey } from "@/types"
 
 export interface AddLiquidityFormikValues {
@@ -16,8 +16,6 @@ export interface AddLiquidityFormikValues {
   balanceY: number;
   tokenXAddress: string;
   tokenYAddress: string;
-  isTokenXLegacy: boolean;
-  isTokenYLegacy: boolean;
 }
 
 export const useAddLiquidityFormik =
@@ -28,8 +26,6 @@ export const useAddLiquidityFormik =
       const initialValues: AddLiquidityFormikValues = {
           amountX: 100,
           amountY: 100,
-          isTokenXLegacy: true,
-          isTokenYLegacy: true,
           balanceX: 0,
           balanceY: 0,
           tokenXAddress: "",
@@ -66,7 +62,7 @@ export const useAddLiquidityFormik =
                   case PlatformKey.Aptos: {
                       // onpen the sign transaction moda
                       const data = await swrMutation.trigger({
-                          function: buildAptosSwapFQN({
+                          function: buildAptosFQN({
                               network,
                               moduleName: "router",
                               functionNameOrResourceType: "add_liquidity",

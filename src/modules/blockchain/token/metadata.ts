@@ -1,6 +1,8 @@
 import { ChainKey, Network, TokenKey } from "@/types"
 import { createAptosClient } from "../rpcs"
 import { GetFungibleAssetMetadataResponse } from "@aptos-labs/ts-sdk"
+import { HeroUITheme } from "@/types"
+import { APTOS_COIN_ADDRESS } from "@/constants"
 
 export interface GetTokenMetadataParams {
   chainKey: ChainKey;
@@ -16,8 +18,8 @@ export interface TokenMetadata {
     name: string
     symbol: string
     decimals: number
-    imageUrl: string
-    tokenAddress?: string
+    iconUris: Record<HeroUITheme, string>
+    address?: string
 }
 
 export const getAptosTokenMetadata = async ({
@@ -30,10 +32,34 @@ export const getAptosTokenMetadata = async ({
     const aptosClient = createAptosClient(network)
     let tokenMetadata: GetFungibleAssetMetadataResponse[0]
     if (isTypeTag) {
+        if (tokenAddress === APTOS_COIN_ADDRESS) {
+            return {
+                name: "Aptos",
+                symbol: "APT",
+                decimals: 6,
+                iconUris: {
+                    [HeroUITheme.Light]: "/aptos-light.svg",
+                    [HeroUITheme.Dark]: "/aptos-dark.svg",
+                },
+                address: tokenAddress,
+            }
+        }
         tokenMetadata = await aptosClient.getFungibleAssetMetadataByAssetType({ 
             assetType: tokenAddress,
         })
     } else {
+        if (tokenAddress === "0xa") {
+            return {
+                name: "Aptos",
+                symbol: "APT",
+                decimals: 6,
+                iconUris: {
+                    [HeroUITheme.Light]: "/aptos-light.svg",
+                    [HeroUITheme.Dark]: "/aptos-dark.svg",
+                },
+                address: tokenAddress,
+            }
+        }
         const metadata = await aptosClient.view({
             payload: {
                 function: "0x1::fungible_asset::metadata",
@@ -48,8 +74,11 @@ export const getAptosTokenMetadata = async ({
         name,
         symbol,
         decimals,
-        imageUrl: icon_uri || "",
-        tokenAddress,
+        iconUris: {
+            [HeroUITheme.Light]: icon_uri || "",
+            [HeroUITheme.Dark]: icon_uri || "",
+        },
+        address: tokenAddress,
     }
 }
 

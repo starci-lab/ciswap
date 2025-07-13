@@ -5,7 +5,7 @@ import {
     useAptosMoveCallSwrMutation,
     UseAptosMoveCallSwrMutationResponse,
 } from "./useAptosMoveCallSwrMutation"
-import { buildAptosSwapFQN } from "@/config"
+import { buildAptosFQN } from "@/config"
 import { UseSWRMutation } from "./types"
 
 export interface CollectFeesSwrMutationParams {
@@ -28,7 +28,7 @@ export const useCollectFeesSwrMutation = (): UseSWRMutation<
             switch (platformKeyToChainKey[chainKey]) {
             case PlatformKey.Aptos: {
                 const data = await aptosMoveCallSwrMutation.trigger({
-                    function: buildAptosSwapFQN({
+                    function: buildAptosFQN({
                         functionNameOrResourceType: "collect_fees",
                         moduleName: "router",
                         network,

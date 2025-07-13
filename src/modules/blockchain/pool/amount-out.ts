@@ -1,6 +1,6 @@
 import { ChainKey, Network } from "@/types"
 import { createAptosClient } from "../rpcs"
-import { buildAptosSwapFQN } from "@/config"
+import { buildAptosFQN } from "@/config"
 import { computeDenomination, computeRaw } from "@/utils"
 
 export interface GetAmountOutParams {
@@ -26,7 +26,7 @@ export const getAptosAmountOut = async ({
     const data = await aptosClient.view(
         {
             payload: {
-                function: buildAptosSwapFQN({
+                function: buildAptosFQN({
                     network,
                     moduleName: "quoter",
                     functionNameOrResourceType: "get_amount_out",

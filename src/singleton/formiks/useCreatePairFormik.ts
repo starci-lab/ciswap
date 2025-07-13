@@ -7,19 +7,15 @@ import {
     useAptosMoveCallSwrMutation,
     UseAptosMoveCallSwrMutationResponse,
 } from "../swrs"
-import { computeRaw } from "@/utils"
+import { computeRaw, isAptosLegacyType } from "@/utils"
 import { addErrorToast, addTxToast } from "@/toasts"
 import { useAppSelector } from "@/redux"
-import { buildAptosSwapFQN } from "@/config"
+import { buildAptosFQN } from "@/config"
 import { chainKeyToPlatformKey, PlatformKey } from "@/types"
 
 export interface CreatePairFormikValues {
   tokenX: string;
-  tokenXTyped: string;
-  isTokenXLegacy: boolean;
   tokenY: string;
-  tokenYTyped: string;
-  isTokenYLegacy: boolean;
   tokenXMetadata?: TokenMetadata;
   tokenYMetadata?: TokenMetadata;
   amountX: number;
@@ -32,20 +28,14 @@ export const useCreatePairFormik = (): FormikProps<CreatePairFormikValues> => {
   >(APTOS_MOVE_CALL_SWR_MUTATION)
     const initialValues: CreatePairFormikValues = {
         tokenX: "",
-        tokenXTyped: "",
-        isTokenXLegacy: true,
         tokenY: "",
-        tokenYTyped: "",
-        isTokenYLegacy: true,
         amountX: 10000,
         amountY: 10000,
     }
     // Yup validation schema
     const validationSchema = Yup.object({
         tokenX: Yup.string().required("Token X is required"),
-        tokenXTyped: Yup.string().required("Token X type is required"),
         tokenY: Yup.string().required("Token Y is required"),
-        tokenYTyped: Yup.string().required("Token Y type is required"),
         amountX: Yup.number().required("Amount X is required"),
         amountY: Yup.number().required("Amount Y is required"),
     })
@@ -61,14 +51,14 @@ export const useCreatePairFormik = (): FormikProps<CreatePairFormikValues> => {
             tokenY,
             amountX,
             amountY,
-            isTokenXLegacy,
-            isTokenYLegacy,
         }) => {
             try {
             // onpen the sign transaction moda
                 let data: UseAptosMoveCallSwrMutationResponse
                 switch (chainKeyToPlatformKey[chainKey]) {
                 case PlatformKey.Aptos: {
+                    const isTokenXLegacy = isAptosLegacyType(tokenX)
+                    const isTokenYLegacy = isAptosLegacyType(tokenY)
                     const numLegacies = [isTokenXLegacy, isTokenYLegacy].filter(
                         Boolean
                     ).length
@@ -76,7 +66,7 @@ export const useCreatePairFormik = (): FormikProps<CreatePairFormikValues> => {
                     case 0:
                         {
                             data = await swrMutation.trigger({
-                                function: buildAptosSwapFQN({
+                                function: buildAptosFQN({
                                     network,
                                     moduleName: "router",
                                     functionNameOrResourceType: "create_pair",
@@ -95,7 +85,7 @@ export const useCreatePairFormik = (): FormikProps<CreatePairFormikValues> => {
                         const typeArg = isTokenXLegacy ? tokenX : tokenY
                         const funcArg = isTokenXLegacy ? tokenY : tokenX
                         data = await swrMutation.trigger({
-                            function: buildAptosSwapFQN({
+                            function: buildAptosFQN({
                                 network,
                                 moduleName: "router",
                                 functionNameOrResourceType: "create_pair_with_one_coin",
@@ -111,7 +101,7 @@ export const useCreatePairFormik = (): FormikProps<CreatePairFormikValues> => {
                     }
                     default: {
                         data = await swrMutation.trigger({
-                            function: buildAptosSwapFQN({
+                            function: buildAptosFQN({
                                 network,
                                 moduleName: "router",
                                 functionNameOrResourceType: "create_pair_with_dual_coins",

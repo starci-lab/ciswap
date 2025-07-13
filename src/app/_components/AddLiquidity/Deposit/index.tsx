@@ -8,13 +8,16 @@ import {
 } from "@/singleton"
 import React from "react"
 import { useAppSelector } from "@/redux"
-import { APTOS_COIN_ADDRESS } from "@/constants"
+import { useTheme } from "next-themes"
+import { getHeroUITheme } from "@/utils"
 
 export const Deposit = () => {
     const formik =
     useSingletonHook2<ReturnType<typeof useAddLiquidityFormik>>(
         ADD_LIQUIDITY_FORMIK
     )
+    const { theme } = useTheme()
+    const _theme = getHeroUITheme(theme)
     const tokenMetadatas = useAppSelector((state) => state.stateReducer.tokenMetadatas)
     return (
         <>
@@ -23,10 +26,9 @@ export const Deposit = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
                             <TokenImage
-                                isAptos={tokenMetadatas?.tokenXMetadata.tokenAddress === APTOS_COIN_ADDRESS}
                                 className="w-5 h-5"
-                                src={tokenMetadatas?.tokenXMetadata.imageUrl}
-                                alt={tokenMetadatas?.tokenXMetadata.name}
+                                iconUrls={tokenMetadatas?.tokenXMetadata.iconUris}
+                                theme={_theme}
                             />
                             <div className="text-sm">
                                 {tokenMetadatas?.tokenXMetadata.name}
@@ -62,10 +64,9 @@ export const Deposit = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
                             <TokenImage
-                                isAptos={tokenMetadatas?.tokenYMetadata.tokenAddress === APTOS_COIN_ADDRESS}
                                 className="w-5 h-5"
-                                src={tokenMetadatas?.tokenYMetadata.imageUrl}
-                                alt={tokenMetadatas?.tokenYMetadata.name}
+                                iconUrls={tokenMetadatas?.tokenYMetadata.iconUris}
+                                theme={_theme}
                             />
                             <div className="text-sm">
                                 {tokenMetadatas?.tokenYMetadata.name}

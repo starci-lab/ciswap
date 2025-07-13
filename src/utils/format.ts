@@ -1,6 +1,7 @@
 import numeral from "numeral"
 import dayjs from "dayjs"
 import { parseTypeTag } from "@aptos-labs/ts-sdk"
+import { HeroUITheme } from "@/types"
 
 export const NUMBER_PATTERN_1 = "0.00000a"
 export const NUMBER_PATTERN_2 = "0.0a"
@@ -82,4 +83,8 @@ export const isAptosLegacyType = (tokenAddress: string) => {
         console.error(error)
         return false
     }
+}
+
+export const getHeroUITheme = (theme?: string): HeroUITheme => {
+    return theme === "dark" ? HeroUITheme.Dark : HeroUITheme.Light
 }

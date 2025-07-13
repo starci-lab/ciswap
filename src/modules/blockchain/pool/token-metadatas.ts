@@ -3,7 +3,7 @@ import {
     Network,
 } from "@/types"
 import { createAptosClient } from "../rpcs"
-import { buildAptosSwapFQN } from "@/config"
+import { buildAptosFQN } from "@/config"
 import { getTokenMetadata, TokenMetadata } from "../token"
 
 export interface GetTokenMetadatasParams {
@@ -33,7 +33,7 @@ export const getAptosTokenMetadatas = async ({
         tokenDebtYAddress
     ] = await aptosClient.view({
         payload: {
-            function: buildAptosSwapFQN({
+            function: buildAptosFQN({
                 network,
                 moduleName: "swap",
                 functionNameOrResourceType: "get_tokens",
@@ -43,7 +43,7 @@ export const getAptosTokenMetadatas = async ({
         },
     })
     const result: Partial<TokenMetadatas> = {}
-    const setToken0Metadata = async () => {
+    const setTokenXMetadata = async () => {
         const metadata = await getTokenMetadata({
             chainKey,
             network,
@@ -51,7 +51,7 @@ export const getAptosTokenMetadatas = async ({
         })
         result.tokenXMetadata = metadata
     }
-    const setToken1Metadata = async () => {
+    const setTokenYMetadata = async () => {
         const metadata = await getTokenMetadata({
             chainKey,
             network,
@@ -76,8 +76,8 @@ export const getAptosTokenMetadatas = async ({
         result.tokenDebtYMetadata = metadata
     }
     await Promise.all([
-        setToken0Metadata(),
-        setToken1Metadata(),
+        setTokenXMetadata(),
+        setTokenYMetadata(),
         setTokenDebtXMetadata(),
         setTokenDebtYMetadata(),
     ])      

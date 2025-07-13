@@ -6,6 +6,7 @@ import {
     getFee,
     getPercentageString,
     truncateString,
+    getHeroUITheme,
 } from "@/utils"
 import {
     Button,
@@ -32,8 +33,8 @@ import { useRouter } from "next/navigation"
 import { useCollectFeesSwrMutation, useSingletonHook } from "@/singleton"
 import { COLLECT_FEES_SWR_MUTATION } from "@/singleton/keys"
 import { useActiveAddress } from "@/hooks"
-import { APTOS_COIN_ADDRESS } from "@/constants"
 import { addTxToast } from "@/toasts"
+import { useTheme } from "next-themes"
 
 const Page = () => {
     const params = useParams()
@@ -55,6 +56,8 @@ const Page = () => {
   >(COLLECT_FEES_SWR_MUTATION)
     const accountAddress = useActiveAddress()
     const network = useAppSelector((state) => state.chainReducer.network)
+    const { theme } = useTheme()
+    const _theme = getHeroUITheme(theme)
     if (!position) return
     return (
         <div className="max-w-[500px] mx-auto">
@@ -90,10 +93,9 @@ const Page = () => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1">
                                 <TokenImage 
-                                    isAptos={tokenMetadatas?.tokenXMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
+                                    theme={_theme}
                                     className="w-5 h-5"
-                                    src={tokenMetadatas?.tokenXMetadata?.imageUrl}
-                                    alt={tokenMetadatas?.tokenXMetadata?.name}
+                                    iconUrls={tokenMetadatas?.tokenXMetadata?.iconUris}
                                 />
                                 <div className="text-sm">
                                     {tokenMetadatas?.tokenXMetadata?.name}
@@ -119,10 +121,9 @@ const Page = () => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1">
                                 <TokenImage
-                                    isAptos={tokenMetadatas?.tokenYMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
+                                    theme={_theme}
                                     className="w-5 h-5"
-                                    src={tokenMetadatas?.tokenYMetadata?.imageUrl}
-                                    alt={tokenMetadatas?.tokenYMetadata?.name}
+                                    iconUrls={tokenMetadatas?.tokenYMetadata?.iconUris}
                                 />
                                 <div className="text-sm">
                                     {tokenMetadatas?.tokenYMetadata?.name}
@@ -228,8 +229,8 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
-                                isAptos={tokenMetadatas?.tokenXMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
-                                src={tokenMetadatas?.tokenXMetadata?.imageUrl}
+                                theme={_theme}
+                                iconUrls={tokenMetadatas?.tokenXMetadata?.iconUris}
                                 className="w-4 h-4"
                             />
                             <div className="text-sm">
@@ -254,8 +255,8 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
-                                isAptos={tokenMetadatas?.tokenYMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
-                                src={tokenMetadatas?.tokenYMetadata?.imageUrl}
+                                theme={_theme}
+                                iconUrls={tokenMetadatas?.tokenYMetadata?.iconUris}
                                 className="w-4 h-4"
                             />
                             <div className="text-sm">
@@ -280,8 +281,8 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
-                                isAptos={tokenMetadatas?.tokenDebtXMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
-                                src={tokenMetadatas?.tokenDebtXMetadata?.imageUrl}
+                                theme={_theme}
+                                iconUrls={tokenMetadatas?.tokenDebtXMetadata?.iconUris}
                                 className="w-4 h-4"
                             />
                             <div className="text-sm">
@@ -306,8 +307,8 @@ const Page = () => {
                     <div className="flex justify-between gap-2 w-full">
                         <div className="flex items-center gap-1">
                             <TokenImage
-                                isAptos={tokenMetadatas?.tokenDebtYMetadata?.tokenAddress === APTOS_COIN_ADDRESS}
-                                src={tokenMetadatas?.tokenDebtYMetadata?.imageUrl}
+                                theme={_theme}
+                                iconUrls={tokenMetadatas?.tokenDebtYMetadata?.iconUris}
                                 className="w-4 h-4"
                             />
                             <div className="text-sm">

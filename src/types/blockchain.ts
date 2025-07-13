@@ -42,3 +42,18 @@ export interface AptosMoveTableHandle {
 export interface AptosMoveObject {
   inner: string
 }
+
+export enum HeroUITheme {
+  Light = "light",
+  Dark = "dark",
+}
+
+export type TokenIconUris = Record<HeroUITheme, string>
+
+export interface TokenMetadata {
+  name: string
+  symbol: string
+  decimals: number
+  iconUris: TokenIconUris
+  address: string
+}

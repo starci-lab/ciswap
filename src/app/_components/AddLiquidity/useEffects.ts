@@ -37,7 +37,7 @@ export const useEffects = () => {
             const { balance } = await getBalanceSwrMutation.trigger({
                 tokenAddress: formik.values.tokenXAddress,
                 accountAddress,
-                isTypeTag: formik.values.isTokenXLegacy,
+                isTypeTag: isAptosLegacyType(formik.values.tokenXAddress),
             })
             formik.setFieldValue("balanceX", balance)
         }
@@ -51,7 +51,7 @@ export const useEffects = () => {
             const { balance } = await getBalanceSwrMutation.trigger({
                 tokenAddress: formik.values.tokenYAddress,
                 accountAddress,
-                isTypeTag: formik.values.isTokenYLegacy,
+                isTypeTag: isAptosLegacyType(formik.values.tokenYAddress),
             })
             console.log(balance)
             formik.setFieldValue("balanceY", balance)
@@ -63,13 +63,7 @@ export const useEffects = () => {
         if (tokenMetadatasSwr.data?.tokenXMetadata) {
             formik.setFieldValue(
                 "tokenXAddress",
-                tokenMetadatasSwr.data?.tokenXMetadata.tokenAddress
-            )
-            formik.setFieldValue(
-                "isTokenXLegacy",
-                isAptosLegacyType(
-                    tokenMetadatasSwr.data?.tokenXMetadata.tokenAddress || ""
-                )
+                tokenMetadatasSwr.data?.tokenXMetadata.address
             )
         }
     }, [tokenMetadatasSwr.data?.tokenXMetadata])
@@ -78,13 +72,7 @@ export const useEffects = () => {
         if (tokenMetadatasSwr.data?.tokenYMetadata) {
             formik.setFieldValue(
                 "tokenYAddress",
-                tokenMetadatasSwr.data?.tokenYMetadata.tokenAddress
-            )
-            formik.setFieldValue(
-                "isTokenYLegacy",
-                isAptosLegacyType(
-                    tokenMetadatasSwr.data?.tokenYMetadata.tokenAddress || ""
-                )
+                tokenMetadatasSwr.data?.tokenYMetadata.address
             )
         }
     }, [tokenMetadatasSwr.data?.tokenYMetadata])

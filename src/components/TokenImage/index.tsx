@@ -1,36 +1,25 @@
 import React from "react"
-import { cn, Image, ImageProps } from "@heroui/react"
+import { cn, Image } from "@heroui/react"
 import { QuestionIcon } from "@phosphor-icons/react"
-import { useTheme } from "next-themes"
+import { HeroUITheme } from "@/types"
 
-export interface TokenImageProps extends ImageProps {
-  isAptos?: boolean;
+export interface TokenImageProps {
+    iconUrls?: Partial<Record<HeroUITheme, string>> 
+    theme: HeroUITheme
+    className?: string
 }
 export const TokenImage = ({
-    src,
-    alt,
+    iconUrls,
+    theme,
     className,
-    isAptos = false,
-    ...props
 }: TokenImageProps) => {
-    const { theme } = useTheme()
-    if (isAptos) {
+    if (iconUrls?.[theme]) {
         return (
             <Image
-                src={theme === "dark" ? "/aptos-dark.svg" : "/aptos-light.svg"}
-                alt={alt}
+                src={iconUrls[theme]}
                 className={cn("w-10 h-10 rounded-full", className)}
-                {...props}
             />
         )
     }
-    if (!src) return <QuestionIcon className={cn("w-10 h-10", className)} />
-    return (
-        <Image
-            src={src}
-            alt={alt}
-            className={cn("w-10 h-10 rounded-full", className)}
-            {...props}
-        />
-    )
+    return <QuestionIcon className={cn("w-10 h-10", className)} />
 }
