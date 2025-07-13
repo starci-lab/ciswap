@@ -24,8 +24,8 @@ export const Swap = () => {
     useSingletonHook2<ReturnType<typeof useSwapFormik>>(SWAP_FORMIK)
 
     useEffect(() => {
-        formik.setFieldValue("zeroForOne", formik.values.zeroForOne)
-    }, [formik.values.zeroForOne])
+        formik.setFieldValue("xForY", formik.values.xForY)
+    }, [formik.values.xForY])
 
     useEffect(() => {
         if (
@@ -39,7 +39,7 @@ export const Swap = () => {
                 const data = await swrMutation.trigger({
                     amountIn: Number.parseFloat(formik.values.amountInString ?? "0"),
                     poolId: 0,
-                    zeroForOne: formik.values.zeroForOne,
+                    xForY: formik.values.xForY,
                 })
                 formik.setFieldValue("expectedAmountOut", data.amountOut)
                 formik.setFieldValue("expectedAmountDebtOut", data.amountVirtualOut)
@@ -60,7 +60,7 @@ export const Swap = () => {
         formik.values.tokenX,
         formik.values.tokenY,
         formik.values.amountInString,
-        formik.values.zeroForOne,
+        formik.values.xForY,
     ])
 
     useEffects()
@@ -109,7 +109,7 @@ export const Swap = () => {
                             "tokenYMetadata",
                             formik.values.tokenXMetadata
                         )
-                        formik.setFieldValue("zeroForOne", !formik.values.zeroForOne)
+                        formik.setFieldValue("xForY", !formik.values.xForY)
                     }}
                 >
                     <ArrowDownIcon className="w-5 h-5" />

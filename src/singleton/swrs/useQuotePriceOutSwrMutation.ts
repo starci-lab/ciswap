@@ -6,7 +6,7 @@ import { UseSWRMutation } from "./types"
 export interface UseQuotePriceOutSwrParams {
     amountIn: number
     poolId: number
-    zeroForOne: boolean
+    xForY: boolean
 }
 // ciswap only allow you to quote amount out due to the virtualized liquidity
 export const useQuotePriceOutSwrMutation = (): UseSWRMutation<
@@ -22,7 +22,7 @@ export const useQuotePriceOutSwrMutation = (): UseSWRMutation<
                 chainKey,
                 amountIn: arg.amountIn,
                 poolId: arg.poolId,
-                zeroForOne: arg.zeroForOne,
+                xForY: arg.xForY,
                 network
             })
     )

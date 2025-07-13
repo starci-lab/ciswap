@@ -8,7 +8,7 @@ export interface GetAmountOutParams {
   network?: Network;
   amountIn: number;
   poolId: number;
-  zeroForOne: boolean;
+  xForY: boolean;
 }
 
 export interface GetAmountOutResult {
@@ -20,7 +20,7 @@ export const getAptosAmountOut = async ({
     network,
     amountIn,
     poolId,
-    zeroForOne,
+    xForY,
 }: GetAmountOutParams): Promise<GetAmountOutResult> => {
     const aptosClient = createAptosClient(network)
     const data = await aptosClient.view(
@@ -35,7 +35,7 @@ export const getAptosAmountOut = async ({
                 functionArguments: [
                     poolId,
                     computeRaw(amountIn),
-                    zeroForOne,
+                    xForY,
                 ]
             }
         }

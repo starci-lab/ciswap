@@ -46,10 +46,10 @@ export const useEffects = () => {
         const tokenY =
       searchParams.get("tokenY") ||
       "0xffbd7560161ea26468a482555669eec1f28f7fb1d985aa44e0a58413b267ce78"
-        const zeroForOne = Boolean(searchParams.get("zeroForOne") || "true")
+        const xForY = Boolean(searchParams.get("xForY") || "true")
         formik.setFieldValue("tokenX", tokenX)
         formik.setFieldValue("tokenY", tokenY)
-        formik.setFieldValue("zeroForOne", zeroForOne)
+        formik.setFieldValue("xForY", xForY)
     }, [])
 
     useEffect(() => {
@@ -97,9 +97,9 @@ export const useEffects = () => {
         if (formik.values.tokenY) { 
             params.set("tokenY", formik.values.tokenY)
         }
-        if (formik.values.zeroForOne) {
-            params.set("zeroForOne", formik.values.zeroForOne.toString())
+        if (formik.values.xForY) {
+            params.set("xForY", formik.values.xForY.toString())
         }
         router.push(`?${params.toString()}`)
-    }, [formik.values.tokenX, formik.values.tokenY, formik.values.zeroForOne])
+    }, [formik.values.tokenX, formik.values.tokenY, formik.values.xForY])
 }
