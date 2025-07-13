@@ -29,19 +29,19 @@ export const Navbar = () => {
                 </div>
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem>
-                    <Link color="foreground" href="#">
+                <NavbarItem isActive>
+                    <Link color="primary" href="/">
             Trade
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive>
-                    <Link aria-current="page" href="#">
-            Earn
+                <NavbarItem>
+                    <Link color="foreground" href="/">
+            Bridge
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" href="#">
-            Bridge
+                    <Link color="foreground" href="/create-token">
+            Create Token
                     </Link>
                 </NavbarItem>
             </NavbarContent>

@@ -1,4 +1,4 @@
-import { Button, Input, Spacer, Spinner, Tooltip } from "@heroui/react"
+import { Button, Input, Link, Spacer, Spinner, Tooltip } from "@heroui/react"
 import { ArrowDownIcon, PencilIcon } from "@phosphor-icons/react"
 import React, { useEffect } from "react"
 import { SelectToken } from "./SelectToken"
@@ -166,6 +166,27 @@ export const Swap = () => {
             </Button>
             <Spacer y={4} />
             <div>
+                <div className="flex justify-between items-center w-full">
+                    <Tooltip
+                        content={
+                            <div className="max-w-[200px]">
+                            Pool route
+                            </div>
+                        }
+                    >
+                        <div className="text-sm">Route</div>
+                    </Tooltip>
+                    <div className="flex flex-col items-end">
+                        {
+                            formik.values.pools.map((pool, index) => (
+                                <Link color="secondary" underline="always" key={index}>
+                                    Pool {pool}
+                                </Link>
+                            ))
+                        }
+                    </div>
+                </div>
+                <Spacer y={2} />
                 <div className="flex justify-between items-center w-full">
                     <Tooltip
                         content={

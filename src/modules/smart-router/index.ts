@@ -49,4 +49,5 @@ export const quoteBestRoute = async ({
     ) {
         return [3]
     }
+    return [0]
 }
