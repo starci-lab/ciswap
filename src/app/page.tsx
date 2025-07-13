@@ -13,12 +13,12 @@ import {
 } from "@heroui/react"
 import { motion } from "framer-motion"
 import { BlockMath } from "react-katex"
+import { getHeroUITheme } from "@/utils"
+import { useTheme } from "next-themes"
+import { HeroUITheme } from "@/types"
 
 const Page = () => {
-    const coins = [
-        { src: "/ci-aptos.png", label: "ciAPT" },
-        { src: "/ci-usdc.png", label: "ciUSDC" },
-    ]
+    const { theme } = useTheme()
     return (
         <>
             <div className="max-w-[1024px] mx-auto px-6">
@@ -57,34 +57,90 @@ const Page = () => {
                     <div className="text-2xl font-bold text-center">
             Virtualized TVL — A New Liquidity Primitive
                     </div>
-                    <Spacer y={12} />
-                    <div className="grid grid-cols-2 gap-12">
-                        {coins.map((coin, index) => (
-                            <motion.div
-                                key={coin.label}
-                                className="flex flex-col items-center gap-1.5"
-                                animate={{
-                                    y: [0, -8, 0], // Lắc nhẹ lên xuống
-                                    scale: [1, 1.03, 1], // Phồng nhẹ
-                                }}
-                                transition={{
-                                    duration: 2.5, // Di chuyển chậm, nhẹ nhàng
-                                    repeat: Infinity,
-                                    delay: index * 0.3, // Xen kẽ nhẹ
-                                    ease: "easeInOut",
+                    <Spacer y={16} />
+                    <div className="relative w-[250px] h-[250px] mx-auto">
+                        {/* Center label */}
+                        <div className="absolute top-1/2 left-1/2 z-10 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                            <div className="text-secondary font-bold">Synthetic Liquidity</div>
+                        </div>
+
+                        {/* Orbit circle - larger */}
+                        <div className="absolute inset-0 rounded-full border-2 border-dashed border-gray-300 opacity-30 pointer-events-none" />
+
+                        {/* Rotating container */}
+                        <motion.div
+                            className="absolute inset-0"
+                            animate={{ rotate: 360 }}
+                            transition={{ 
+                                repeat: Infinity, 
+                                duration: 20,  // Slower rotation for better visibility
+                                ease: "linear" 
+                            }}
+                        >
+                            {/* Coin 1 - 0° (top) */}
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                style={{
+                                    transform: "translateX(-50%) translateY(-50%) rotate(0deg) translateY(-120px) rotate(-0deg)"
                                 }}
                             >
-                                <Image
-                                    src={coin.src}
-                                    alt={coin.label}
-                                    width={120}
-                                    height={120}
+                                <Image 
+                                    src="/ci-aptos.png" 
+                                    alt="ciAPT" 
+                                    width={60} 
+                                    height={60}
+                                    className="rounded-full"
                                 />
-                                <div className="text-2xl">{coin.label}</div>
-                            </motion.div>
-                        ))}
+                            </div>
+
+                            {/* Coin 2 - 90° (right) */}
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                style={{
+                                    transform: "translateX(-50%) translateY(-50%) rotate(180deg) translateY(-120px) rotate(-90deg)"
+                                }}
+                            >
+                                <Image 
+                                    src={
+                                        getHeroUITheme(theme) === HeroUITheme.Dark ? "aptos-dark.svg" : "aptos-light.svg"
+                                    }
+                                    alt="APT" 
+                                    width={60} 
+                                    height={60}
+                                    className="rounded-full"
+                                />
+                            </div>
+
+                            {/* Coin 3 - 180° (bottom) */}
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                style={{
+                                    transform: "translateX(-50%) translateY(-50%) rotate(90deg) translateY(-120px) rotate(-180deg)"
+                                }}
+                            >
+                                <Image 
+                                    src="/ci-usdc.png" 
+                                    alt="ciUSDC" 
+                                    width={60} 
+                                    height={60}
+                                    className="rounded-full"
+                                />
+                            </div>
+
+                            {/* Coin 4 - 270° (left) */}
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                style={{
+                                    transform: "translateX(-50%) translateY(-50%) rotate(270deg) translateY(-120px) rotate(-270deg)"
+                                }}
+                            >
+                                <Image 
+                                    src="/usdc.png" 
+                                    alt="USDC" 
+                                    width={60} 
+                                    height={60}
+                                    className="rounded-full"
+                                />
+                            </div>
+                        </motion.div>
                     </div>
-                    <Spacer y={12} />
+                    <Spacer y={16} />
                     <div className="text-foreground-500 text-md mt-2 max-w-[600px]">
             Instead of locking real assets, CiSwap mints synthetic liquidity
             using debt tokens. This allows for high capital efficiency and
@@ -173,7 +229,7 @@ const Page = () => {
             balances:
                     </div>
                     <Spacer y={4} />
-                    <div className="flex justify-center text-4xl">
+                    <div className="flex justify-center text-2xl sm:text-4xl">
                         <BlockMath math="(X + ciX) \cdot (Y + ciY) = k" />
                     </div>
                     <Spacer y={4} />
