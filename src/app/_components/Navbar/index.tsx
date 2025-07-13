@@ -1,3 +1,4 @@
+"use client"
 import React from "react"
 import {
     Navbar as HeroNavbar,
@@ -13,14 +14,16 @@ import { ConnectWalletsButton, SelectChainButton, ThemeSwitch } from "@/modals"
 import { ListIcon } from "@phosphor-icons/react"
 import { useSingletonHook, MOBILE_MENU_MODAL } from "@/singleton"
 import { useIsMobile } from "@/hooks"
+import { useRouter } from "next/navigation"
 
 export const Navbar = () => {
+    const router = useRouter()
     const isMobile = useIsMobile()
     const { onOpen } =
     useSingletonHook<ReturnType<typeof useDisclosure>>(MOBILE_MENU_MODAL)
     return (
         <HeroNavbar>
-            <NavbarBrand>
+            <NavbarBrand onClick={() => router.push("/")}>
                 <div className="flex gap-2 items-center">
                     <div className="font-bold text-inherit">CiSwap</div>
                     <Chip variant="flat" color="warning">
