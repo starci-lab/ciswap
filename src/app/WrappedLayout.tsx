@@ -36,7 +36,7 @@ export const ContentLayout = ({ children }: PropsWithChildren) => {
                 revalidateIfStale: false,
             }}>
                 <HeroUIProvider>
-                    <NextThemesProvider attribute="class" defaultTheme="dark">
+                    <NextThemesProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
                         <SingletonHookProvider>
                             <SingletonHook2Provider>
                                 <IconContext.Provider
