@@ -33,7 +33,11 @@ export const Navbar = () => {
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem isActive>
-                    <Link color="primary" href="/swap">
+                    <Link color="primary" onPress={
+                        () => {
+                            router.push("/swap")
+                        }
+                    }>
             Swap
                     </Link>
                 </NavbarItem>
@@ -43,7 +47,11 @@ export const Navbar = () => {
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" href="/create-token">
+                    <Link color="foreground" onPress={
+                        () => {
+                            router.push("/create-token")
+                        }
+                    }>
             Create Token
                     </Link>
                 </NavbarItem>
