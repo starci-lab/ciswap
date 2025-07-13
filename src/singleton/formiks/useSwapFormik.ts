@@ -109,11 +109,9 @@ export const useSwapFormik = (): FormikProps<SwapFormikValues> => {
                 amount: formik.values.amountInString,
                 xForY: formik.values.xForY,
                 network,
-            }),
-        {
-            keepPreviousData: false,
-        }
+            })
     )
+    console.log(poolsSwr.data)
 
     useEffect(() => {
         if (poolsSwr.data) {

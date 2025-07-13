@@ -31,23 +31,47 @@ export const quoteBestRoute = async ({
     // usdc & usdt
     if (
         tokenXAddress === USDC_ADDRESS &&
-        tokenYAddress === USDT_ADDRESS
+        tokenYAddress === USDT_ADDRESS ||
+        tokenXAddress === USDT_ADDRESS &&
+        tokenYAddress === USDC_ADDRESS  
     ) {
         return [1]
     }
     // usdc & scallop   
     if (
         tokenXAddress === USDC_ADDRESS &&
-        tokenYAddress === SCALLOP_ADDRESS
+        tokenYAddress === SCALLOP_ADDRESS ||
+        tokenXAddress === SCALLOP_ADDRESS &&
+        tokenYAddress === USDC_ADDRESS
     ) {
         return [2]
+    }
+    // usdt & scallop
+    if (
+        tokenXAddress === USDT_ADDRESS &&
+        tokenYAddress === SCALLOP_ADDRESS ||
+        tokenXAddress === SCALLOP_ADDRESS &&
+        tokenYAddress === USDT_ADDRESS
+    ) {
+        return [3]
+    }
+    // usdc & apt
+    if (
+        tokenXAddress === USDC_ADDRESS &&   
+        tokenYAddress === APTOS_ADDRESS ||
+        tokenXAddress === APTOS_ADDRESS &&
+        tokenYAddress === USDC_ADDRESS
+    ) {
+        return [4]
     }
     // usdt & apt
     if (
         tokenXAddress === USDT_ADDRESS &&
-        tokenYAddress === APTOS_ADDRESS
+        tokenYAddress === APTOS_ADDRESS ||
+        tokenXAddress === APTOS_ADDRESS &&
+        tokenYAddress === USDT_ADDRESS
     ) {
-        return [3]
+        return [5]
     }
     return [0]
 }
