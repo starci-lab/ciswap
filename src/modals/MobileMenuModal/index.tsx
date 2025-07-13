@@ -18,7 +18,7 @@ import { ThemeSwitch } from "./ThemeSwitch"
 import { useRouter } from "next/navigation"
 
 export const MobileMenuModal = () => {
-    const { isOpen, onOpenChange } =
+    const { isOpen, onOpenChange, onClose } =
         useSingletonHook<ReturnType<typeof useDisclosure>>(MOBILE_MENU_MODAL)
     const router = useRouter()
     return (
@@ -29,13 +29,22 @@ export const MobileMenuModal = () => {
                 </ModalHeader>
                 <ModalBody> 
                     <div className="flex flex-col gap-2">
-                        <Link onPress={() => router.push("/swap")}>
+                        <Link onPress={() => {
+                            router.push("/swap")
+                            onClose()
+                        }}>
                         Swap
                         </Link>
-                        <Link color="foreground" className="text-foreground-500" onPress={() => router.push("/create-token")}>
+                        <Link color="foreground" className="text-foreground-500" onPress={() => {
+                            router.push("/create-token")
+                            onClose()
+                        }}>
                         Create Token
                         </Link>
-                        <Link color="foreground" className="text-foreground-500" onPress={() => router.push("/bridge")}>
+                        <Link color="foreground" className="text-foreground-500" onPress={() => {
+                            router.push("/bridge")
+                            onClose()
+                        }}>
                         Bridge
                         </Link>
                     </div>
