@@ -6,6 +6,7 @@ import {
     ModalBody,
     ModalHeader,
     Divider,
+    Link,
 } from "@heroui/react"
 import {
     useSingletonHook,
@@ -14,12 +15,12 @@ import {
 import { SelectChainButton } from "./SelectChainButton"
 import { ConnectWalletsButton } from "./ConnectWalletsButton"
 import { ThemeSwitch } from "./ThemeSwitch"
-import { Title } from "@/components"
+import { useRouter } from "next/navigation"
 
 export const MobileMenuModal = () => {
     const { isOpen, onOpenChange } =
         useSingletonHook<ReturnType<typeof useDisclosure>>(MOBILE_MENU_MODAL)
-
+    const router = useRouter()
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
@@ -27,12 +28,22 @@ export const MobileMenuModal = () => {
                     Menu
                 </ModalHeader>
                 <ModalBody> 
-                    <SelectChainButton/>
-                    <ConnectWalletsButton/>
+                    <div className="flex flex-col gap-2">
+                        <Link onPress={() => router.push("/swap")}>
+                        Swap
+                        </Link>
+                        <Link color="foreground" className="text-foreground-500" onPress={() => router.push("/create-token")}>
+                        Create Token
+                        </Link>
+                        <Link color="foreground" className="text-foreground-500" onPress={() => router.push("/bridge")}>
+                        Bridge
+                        </Link>
+                    </div>
+                    <ThemeSwitch/>
                     <Divider/>
-                    <div className="flex items-center justify-between">
-                        <Title text="Mode"/>
-                        <ThemeSwitch/>
+                    <div className="grid grid-cols-2 gap-2">
+                        <SelectChainButton/>
+                        <ConnectWalletsButton/>
                     </div>
                 </ModalBody>
             </ModalContent>

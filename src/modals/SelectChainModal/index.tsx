@@ -28,7 +28,7 @@ export const SelectChainModal = () => {
                 <ModalHeader>Select Chain</ModalHeader>
                 <ModalBody>
                     <div className="grid grid-cols-3 gap-2">
-                        {chains.filter((chain) => chain.key !== ChainKey.Aptos).map((chain) => (
+                        {chains.filter((chain) => chain.key === ChainKey.Aptos).map((chain) => (
                             <Card
                                 disableAnimation={true}
                                 key={chain.key}
