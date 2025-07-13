@@ -30,8 +30,8 @@ export const Navbar = () => {
             </NavbarBrand>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem isActive>
-                    <Link color="primary" href="/">
-            Trade
+                    <Link color="primary" href="/swap">
+            Swap
                     </Link>
                 </NavbarItem>
                 <NavbarItem>

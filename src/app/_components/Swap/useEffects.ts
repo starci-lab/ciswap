@@ -13,8 +13,9 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { isAptosLegacyType } from "@/utils"
 import { tokenMap } from "@/config"
 import { useAppSelector } from "@/redux"
+import { SwapProps } from "./index"
 
-export const useEffects = () => {
+export const useEffects = ({ showGetStarted }: SwapProps) => {
     const chainKey = useAppSelector(state => state.chainReducer.chainKey)
     const network = useAppSelector(state => state.chainReducer.network)
     const formik =
@@ -45,7 +46,7 @@ export const useEffects = () => {
         const tokenX = searchParams.get("tokenX") || "0x1::aptos_coin::AptosCoin"
         const tokenY =
       searchParams.get("tokenY") ||
-      "0xffbd7560161ea26468a482555669eec1f28f7fb1d985aa44e0a58413b267ce78"
+      "0xdb941eb2ea04d875a05c07b20f2584473276a86ada1a5f7fc8c7a54c0f2c4767"
         const xForY = Boolean(searchParams.get("xForY") || "true")
         formik.setFieldValue("tokenX", tokenX)
         formik.setFieldValue("tokenY", tokenY)
@@ -90,6 +91,7 @@ export const useEffects = () => {
     }, [formik.values.tokenY, formik.values.tokenYMetadata])
 
     useEffect(() => {
+        if (showGetStarted) return
         const params = new URLSearchParams()
         if (formik.values.tokenX) {
             params.set("tokenX", formik.values.tokenX)

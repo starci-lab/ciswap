@@ -14,8 +14,15 @@ import {
 import { NumberInput } from "../../../components/NumberInput"
 import { roundNumber } from "@/utils"
 import { useEffects } from "./useEffects"
+import { useRouter } from "next/navigation"
 
-export const Swap = () => {
+export interface SwapProps {
+    showGetStarted?: boolean
+    className?: string
+}
+
+export const Swap = ({ showGetStarted = false, className }: SwapProps) => {
+    const router = useRouter()
     const { swrMutation } = useSingletonHook<
     ReturnType<typeof useQuotePriceOutSwrMutation>
   >(QUOTE_PRICE_OUT_SWR_MUTATION)
@@ -63,10 +70,10 @@ export const Swap = () => {
         formik.values.xForY,
     ])
 
-    useEffects()
+    useEffects({ showGetStarted })
 
     return (
-        <div>
+        <div className={className}>
             <div className="flex flex-col gap-4 items-center">
                 <div className="w-full">
                     <NumberInput
@@ -85,13 +92,19 @@ export const Swap = () => {
                             formik.setFieldValue("amountInString", value)
                         }}
                     />
-                    <Spacer y={1.5} />
-                    <div className="flex flex-row-reverse">
-                        <div className="text-xs text-foreground-500">
+                    {
+                        !showGetStarted && (
+                            <>
+                                <Spacer y={1.5} />
+                                <div className="flex flex-row-reverse">
+                                    <div className="text-xs text-foreground-500">
               Balance: {formik.values.balanceIn.toString()}{" "}
-                            {formik.values.tokenXMetadata?.symbol}
-                        </div>
-                    </div>
+                                        {formik.values.tokenXMetadata?.symbol}
+                                    </div>
+                                </div>
+                            </>
+                        )
+                    }
                 </div>
                 <Button
                     className="w-10 h-10"
@@ -155,121 +168,137 @@ export const Swap = () => {
                 />
             </div>
             <Spacer y={6} />
-            <Button
-                fullWidth
-                isDisabled={!formik.isValid}
-                color="primary"
-                isLoading={formik.isSubmitting}
-                onPress={() => formik.handleSubmit()}
-            >
+            {
+                showGetStarted ? (
+                    <Button
+                        fullWidth
+                        color="primary"
+                        onPress={() => {
+                            router.push("/swap")
+                        }}
+                    >
+                        Get Started
+                    </Button>
+                )
+                    : (
+                        <>
+                            <Button
+                                fullWidth
+                                isDisabled={!formik.isValid}
+                                color="primary"
+                                isLoading={formik.isSubmitting}
+                                onPress={() => formik.handleSubmit()}
+                            >
         Swap
-            </Button>
-            <Spacer y={4} />
-            <div>
-                <div className="flex justify-between items-center w-full">
-                    <Tooltip
-                        content={
-                            <div className="max-w-[200px]">
+                            </Button>
+                            <Spacer y={4} />
+                            <div>
+                                <div className="flex justify-between items-center w-full">
+                                    <Tooltip
+                                        content={
+                                            <div className="max-w-[200px]">
                             Pool route
-                            </div>
-                        }
-                    >
-                        <div className="text-sm">Route</div>
-                    </Tooltip>
-                    <div className="flex flex-col items-end">
-                        {
-                            formik.values.pools.map((pool, index) => (
-                                <Link color="secondary" underline="always" key={index}>
+                                            </div>
+                                        }
+                                    >
+                                        <div className="text-sm">Route</div>
+                                    </Tooltip>
+                                    <div className="flex flex-col items-end">
+                                        {
+                                            formik.values.pools.map((pool, index) => (
+                                                <Link color="secondary" underline="always" key={index}>
                                     Pool {pool}
-                                </Link>
-                            ))
-                        }
-                    </div>
-                </div>
-                <Spacer y={2} />
-                <div className="flex justify-between items-center w-full">
-                    <Tooltip
-                        content={
-                            <div className="max-w-[200px]">
+                                                </Link>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                                <Spacer y={2} />
+                                <div className="flex justify-between items-center w-full">
+                                    <Tooltip
+                                        content={
+                                            <div className="max-w-[200px]">
                             Amount you are guaranteed to receive.
-                            </div>
-                        }
-                    >
-                        <div className="text-sm">Minimun Received</div>
-                    </Tooltip>
-                    <div className="flex flex-col items-end">
-                        <div className="text-sm flex items-center gap-2">
-                            <div>
-                                {roundNumber(formik.values.expectedAmountOut * 0.95)}
-                            </div>
-                            <div className="text-gray-500">
-                                {formik.values.tokenYMetadata?.symbol}
-                            </div>
-                        </div>  
-                        <div className="text-sm flex items-center gap-2">
-                            <div>
-                                {roundNumber(formik.values.expectedAmountDebtOut * 0.95)}
-                            </div>
-                            <div className="text-gray-500">
-                                {`ci${formik.values.tokenYMetadata?.symbol}`}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <Spacer y={2} />
-                <div className="flex justify-between items-center w-full">
-                    <Tooltip
-                        content={
-                            <div className="max-w-[200px]">
+                                            </div>
+                                        }
+                                    >
+                                        <div className="text-sm">Minimun Received</div>
+                                    </Tooltip>
+                                    <div className="flex flex-col items-end">
+                                        <div className="text-sm flex items-center gap-2">
+                                            <div>
+                                                {roundNumber(formik.values.expectedAmountOut * 0.95)}
+                                            </div>
+                                            <div className="text-gray-500">
+                                                {formik.values.tokenYMetadata?.symbol}
+                                            </div>
+                                        </div>  
+                                        <div className="text-sm flex items-center gap-2">
+                                            <div>
+                                                {roundNumber(formik.values.expectedAmountDebtOut * 0.95)}
+                                            </div>
+                                            <div className="text-gray-500">
+                                                {`ci${formik.values.tokenYMetadata?.symbol}`}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <Spacer y={2} />
+                                <div className="flex justify-between items-center w-full">
+                                    <Tooltip
+                                        content={
+                                            <div className="max-w-[200px]">
                 Permissible price deviation (%) between quoted and execution
                 price of swap. For cross-chain swaps, this applies separately to
                 both source and destination chains.
-                            </div>
-                        }
-                    >
-                        <div className="text-sm">Slippage Tolerance</div>
-                    </Tooltip>
-                    <Button
-                        endContent={<PencilIcon />}
-                        size="sm"
-                        className="text-sm"
-                        variant="flat"
-                        color="secondary"
-                    >
+                                            </div>
+                                        }
+                                    >
+                                        <div className="text-sm">Slippage Tolerance</div>
+                                    </Tooltip>
+                                    <Button
+                                        endContent={<PencilIcon />}
+                                        size="sm"
+                                        className="text-sm"
+                                        variant="flat"
+                                        color="secondary"
+                                    >
             Auto: 0.5%
-                    </Button>
-                </div>
-                <Spacer y={2}/>
-                <div className="flex justify-between items-center w-full">
-                    <Tooltip
-                        content={
-                            <div className="max-w-[200px]">
+                                    </Button>
+                                </div>
+                                <Spacer y={2}/>
+                                <div className="flex justify-between items-center w-full">
+                                    <Tooltip
+                                        content={
+                                            <div className="max-w-[200px]">
                             Trading fee varies by pool fee tier.
+                                            </div>
+                                        }
+                                    >
+                                        <div className="text-sm">Trading Fees</div>
+                                    </Tooltip>
+                                    <div className="flex flex-col items-end">
+                                        <div className="text-sm flex items-center gap-2">
+                                            <div>
+                                                {roundNumber(formik.values.expectedAmountOut * 0.03)}
+                                            </div>
+                                            <div className="text-gray-500">
+                                                {formik.values.tokenYMetadata?.symbol}
+                                            </div>
+                                        </div>
+                                        <div className="text-sm flex items-center gap-2">
+                                            <div>
+                                                {roundNumber(formik.values.expectedAmountDebtOut * 0.03)}
+                                            </div>
+                                            <div className="text-gray-500">
+                                                {`ci${formik.values.tokenYMetadata?.symbol}`}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        }
-                    >
-                        <div className="text-sm">Trading Fees</div>
-                    </Tooltip>
-                    <div className="flex flex-col items-end">
-                        <div className="text-sm flex items-center gap-2">
-                            <div>
-                                {roundNumber(formik.values.expectedAmountOut * 0.03)}
-                            </div>
-                            <div className="text-gray-500">
-                                {formik.values.tokenYMetadata?.symbol}
-                            </div>
-                        </div>
-                        <div className="text-sm flex items-center gap-2">
-                            <div>
-                                {roundNumber(formik.values.expectedAmountDebtOut * 0.03)}
-                            </div>
-                            <div className="text-gray-500">
-                                {`ci${formik.values.tokenYMetadata?.symbol}`}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </>
+                    )}
+        </div> 
     )
 }

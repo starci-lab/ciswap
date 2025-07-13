@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import "katex/dist/katex.min.css"
 import React from "react"
 import { WrappedLayout } from "./WrappedLayout"
 import { Open_Sans } from "next/font/google"
