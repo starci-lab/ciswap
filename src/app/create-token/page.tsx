@@ -101,7 +101,9 @@ const Page = () => {
             >
         Create Token
             </Button>
+            <Spacer y={6} />
         </div>
+
     )
 }
 
