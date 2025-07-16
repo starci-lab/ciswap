@@ -7,7 +7,6 @@ import {
     ModalHeader,
     Divider,
     Link,
-    Button,
 } from "@heroui/react"
 import {
     useSingletonHook,
@@ -30,25 +29,25 @@ export const MobileMenuModal = () => {
                 </ModalHeader>
                 <ModalBody> 
                     <div className="flex flex-col gap-2">
-                        <Link as={Button} onPress={() => {
+                        <Link onPress={() => {
                             router.push("/swap")
                             onClose()
                         }}>
                         Swap
                         </Link>
-                        <Link as={Button} color="foreground" className="text-foreground-500" onPress={() => {
+                        <Link color="foreground" className="text-foreground-500" onPress={() => {
                             router.push("/create-token")
                             onClose()
                         }}>
                         Launchpad
                         </Link>
-                        <Link as={Button} color="foreground" className="text-foreground-500" onPress={() => {
+                        <Link color="foreground" className="text-foreground-500" onPress={() => {
                             router.push("/bridge")
                             onClose()
                         }}>
                         Bridge
                         </Link>
-                        <Link as={Button} color="foreground" href="https://ciswap-docs.netlify.app/" isExternal>
+                        <Link color="foreground" href="https://ciswap-docs.netlify.app/" isExternal>
                         Docs
                         </Link>
                     </div>
