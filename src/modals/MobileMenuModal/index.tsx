@@ -47,6 +47,9 @@ export const MobileMenuModal = () => {
                         }}>
                         Bridge
                         </Link>
+                        <Link href="https://ciswap-docs.netlify.app/" isExternal>
+                        Docs
+                        </Link>
                     </div>
                     <ThemeSwitch/>
                     <Divider/>
