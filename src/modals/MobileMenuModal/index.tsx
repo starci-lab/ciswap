@@ -36,16 +36,16 @@ export const MobileMenuModal = () => {
                         Swap
                         </Link>
                         <Link color="foreground" className="text-foreground-500" onPress={() => {
-                            router.push("/create-token")
-                            onClose()
-                        }}>
-                        Launchpad
-                        </Link>
-                        <Link color="foreground" className="text-foreground-500" onPress={() => {
                             router.push("/bridge")
                             onClose()
                         }}>
                         Bridge
+                        </Link>
+                        <Link color="foreground" className="text-foreground-500" onPress={() => {
+                            router.push("/create-token")
+                            onClose()
+                        }}>
+                        Launchpad
                         </Link>
                         <Link color="foreground" className="text-foreground-500" href="https://ciswap-docs.netlify.app/" isExternal>
                         Docs
