@@ -52,7 +52,7 @@ export const Navbar = () => {
                             router.push("/create-token")
                         }
                     }>
-            Create Token
+            Launchpad
                     </Link>
                 </NavbarItem>
                 <NavbarItem>

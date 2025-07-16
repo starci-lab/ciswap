@@ -40,7 +40,7 @@ export const MobileMenuModal = () => {
                             router.push("/create-token")
                             onClose()
                         }}>
-                        Create Token
+                        Launchpad
                         </Link>
                         <Link as={Button} color="foreground" className="text-foreground-500" onPress={() => {
                             router.push("/bridge")
