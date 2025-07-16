@@ -325,7 +325,7 @@ const Page = () => {
                         <Link
                             isExternal
                             color="foreground"
-                            href="#"
+                            href="https://ciswap-docs.netlify.app/"
                             className="text-foreground-500 transition-colors"
                         >
               Docs
