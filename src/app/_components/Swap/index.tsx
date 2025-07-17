@@ -1,9 +1,11 @@
-import { Button, Input, Link, Spacer, Spinner, Tooltip } from "@heroui/react"
+import { Button, Input, Link, Spacer, Spinner, Tooltip, useDisclosure } from "@heroui/react"
 import { ArrowDownIcon, PencilIcon } from "@phosphor-icons/react"
 import React, { useEffect } from "react"
 import { SelectToken } from "./SelectToken"
 import { SelectTokenModalKey } from "@/redux"
+import { useActiveAddress } from "@/hooks"
 import {
+    CONNECT_WALLETS_DISCLOSURE,
     QUOTE_PRICE_OUT_SWR_MUTATION,
     SWAP_FORMIK,
     useQuotePriceOutSwrMutation,
@@ -71,7 +73,8 @@ export const Swap = ({ showGetStarted = false, className }: SwapProps) => {
     ])
 
     useEffects({ showGetStarted })
-
+    const accountAddress = useActiveAddress()
+    const { onOpen } = useSingletonHook<ReturnType<typeof useDisclosure>>(CONNECT_WALLETS_DISCLOSURE)
     return (
         <div className={className}>
             <div className="flex flex-col gap-4 items-center">
@@ -181,16 +184,26 @@ export const Swap = ({ showGetStarted = false, className }: SwapProps) => {
                     </Button>
                 )
                     : (
-                        <>
-                            <Button
-                                fullWidth
-                                isDisabled={!formik.isValid}
-                                color="primary"
-                                isLoading={formik.isSubmitting}
-                                onPress={() => formik.handleSubmit()}
-                            >
+                        <> 
+                            {
+                                accountAddress ? 
+                                    <Button
+                                        fullWidth
+                                        isDisabled={!formik.isValid}
+                                        color="primary"
+                                        isLoading={formik.isSubmitting}
+                                        onPress={() => formik.handleSubmit()}
+                                    >
         Swap
-                            </Button>
+                                    </Button> :
+                                    <Button
+                                        fullWidth
+                                        color="primary"
+                                        onPress={() => onOpen()}
+                                    >
+                            Connect Wallet
+                                    </Button>
+                            }
                             <Spacer y={4} />
                             <div>
                                 <div className="flex justify-between items-center w-full">

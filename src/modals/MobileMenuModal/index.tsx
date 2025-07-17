@@ -62,6 +62,7 @@ export const MobileMenuModal = () => {
         </Modal>
     )
 }
+
 export * from "./ConnectWalletsButton"
 export * from "./SelectChainButton"
 export * from "./ThemeSwitch"
